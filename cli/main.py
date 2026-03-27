@@ -1,10 +1,36 @@
-"""Typer application entrypoint: aggregates subcommands from sibling modules.
+"""Typer application entrypoint for the ``agentrace`` CLI."""
 
-TODO: typer.Typer() with callback for global options (config path, verbosity).
-"""
+from __future__ import annotations
+
+import typer
+
+from cli.run import run
+
+app = typer.Typer(
+    name="agentrace",
+    help="Framework-agnostic evaluation and tracing for LLM agents.",
+    add_completion=False,
+)
+
+app.command("run")(run)
+
+
+@app.command("benchmark")
+def benchmark() -> None:
+    """Placeholder for bundled benchmark suites."""
+    typer.echo("coming soon")
+
+
+@app.command("diff")
+def diff() -> None:
+    """Placeholder for comparing eval JSON exports."""
+    typer.echo("coming soon")
 
 
 def main() -> None:
-    """Console script entrypoint for ``agentrace``."""
-    # TODO: app = typer.Typer(...); register run/benchmark/diff; app()
-    ...
+    """Invoke the Typer application."""
+    app()
+
+
+if __name__ == "__main__":
+    main()

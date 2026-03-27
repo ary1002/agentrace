@@ -1,0 +1,450 @@
+{
+  "run_id": "run_20260327_201921",
+  "dataset_id": "0150b2da",
+  "timestamp": "2026-03-27T20:19:21.167289",
+  "task_results": [
+    {
+      "task_id": "t1",
+      "metric_scores": {
+        "tool_selection_accuracy": 0.5,
+        "step_efficiency": 1.0
+      },
+      "passed": {
+        "tool_selection_accuracy": false,
+        "step_efficiency": true
+      },
+      "failure_types": [],
+      "trace": {
+        "session_id": "t1",
+        "task": "What is X?",
+        "spans": [
+          {
+            "span_id": "28948b0cde856234",
+            "parent_span_id": "87a12daafe36e4da",
+            "span_type": "tool_call",
+            "input": {
+              "tool_name": "search"
+            },
+            "output": {
+              "result": "some search result"
+            },
+            "latency_ms": 0.208585,
+            "token_count": {
+              "prompt": 0,
+              "completion": 0
+            },
+            "cost_usd": 0.0,
+            "timestamp": "2026-03-27T20:19:21.164529+00:00",
+            "framework": "unknown",
+            "error": null
+          },
+          {
+            "span_id": "909aab4521ed6c31",
+            "parent_span_id": "87a12daafe36e4da",
+            "span_type": "tool_call",
+            "input": {
+              "tool_name": "lookup"
+            },
+            "output": {
+              "result": "some lookup result"
+            },
+            "latency_ms": 0.010768,
+            "token_count": {
+              "prompt": 0,
+              "completion": 0
+            },
+            "cost_usd": 0.0,
+            "timestamp": "2026-03-27T20:19:21.164824+00:00",
+            "framework": "unknown",
+            "error": null
+          },
+          {
+            "span_id": "87a12daafe36e4da",
+            "parent_span_id": null,
+            "span_type": "agent_step",
+            "input": {},
+            "output": {},
+            "latency_ms": 0.445903,
+            "token_count": {
+              "prompt": 0,
+              "completion": 0
+            },
+            "cost_usd": 0.0,
+            "timestamp": "2026-03-27T20:19:21.164409+00:00",
+            "framework": "unknown",
+            "error": null
+          }
+        ],
+        "trace_tree": {
+          "span": {
+            "span_id": "87a12daafe36e4da",
+            "parent_span_id": null,
+            "span_type": "agent_step",
+            "input": {},
+            "output": {},
+            "latency_ms": 0.445903,
+            "token_count": {
+              "prompt": 0,
+              "completion": 0
+            },
+            "cost_usd": 0.0,
+            "timestamp": "2026-03-27T20:19:21.164409+00:00",
+            "framework": "unknown",
+            "error": null
+          },
+          "children": [
+            {
+              "span": {
+                "span_id": "28948b0cde856234",
+                "parent_span_id": "87a12daafe36e4da",
+                "span_type": "tool_call",
+                "input": {
+                  "tool_name": "search"
+                },
+                "output": {
+                  "result": "some search result"
+                },
+                "latency_ms": 0.208585,
+                "token_count": {
+                  "prompt": 0,
+                  "completion": 0
+                },
+                "cost_usd": 0.0,
+                "timestamp": "2026-03-27T20:19:21.164529+00:00",
+                "framework": "unknown",
+                "error": null
+              },
+              "children": []
+            },
+            {
+              "span": {
+                "span_id": "909aab4521ed6c31",
+                "parent_span_id": "87a12daafe36e4da",
+                "span_type": "tool_call",
+                "input": {
+                  "tool_name": "lookup"
+                },
+                "output": {
+                  "result": "some lookup result"
+                },
+                "latency_ms": 0.010768,
+                "token_count": {
+                  "prompt": 0,
+                  "completion": 0
+                },
+                "cost_usd": 0.0,
+                "timestamp": "2026-03-27T20:19:21.164824+00:00",
+                "framework": "unknown",
+                "error": null
+              },
+              "children": []
+            }
+          ]
+        },
+        "total_latency_ms": 0.665256,
+        "total_cost_usd": 0.0,
+        "total_tokens": 0,
+        "outcome": "success"
+      },
+      "error": null
+    },
+    {
+      "task_id": "t2",
+      "metric_scores": {
+        "tool_selection_accuracy": 0.5,
+        "step_efficiency": 0.6666666666666666
+      },
+      "passed": {
+        "tool_selection_accuracy": false,
+        "step_efficiency": false
+      },
+      "failure_types": [],
+      "trace": {
+        "session_id": "t2",
+        "task": "What is Y?",
+        "spans": [
+          {
+            "span_id": "c27af8b9e871c551",
+            "parent_span_id": "aa5ac37eacec4546",
+            "span_type": "tool_call",
+            "input": {
+              "tool_name": "search"
+            },
+            "output": {
+              "result": "some search result"
+            },
+            "latency_ms": 0.009956,
+            "token_count": {
+              "prompt": 0,
+              "completion": 0
+            },
+            "cost_usd": 0.0,
+            "timestamp": "2026-03-27T20:19:21.165997+00:00",
+            "framework": "unknown",
+            "error": null
+          },
+          {
+            "span_id": "48a6bf9cd5979308",
+            "parent_span_id": "aa5ac37eacec4546",
+            "span_type": "tool_call",
+            "input": {
+              "tool_name": "lookup"
+            },
+            "output": {
+              "result": "some lookup result"
+            },
+            "latency_ms": 0.010329,
+            "token_count": {
+              "prompt": 0,
+              "completion": 0
+            },
+            "cost_usd": 0.0,
+            "timestamp": "2026-03-27T20:19:21.166064+00:00",
+            "framework": "unknown",
+            "error": null
+          },
+          {
+            "span_id": "aa5ac37eacec4546",
+            "parent_span_id": null,
+            "span_type": "agent_step",
+            "input": {},
+            "output": {},
+            "latency_ms": 0.165606,
+            "token_count": {
+              "prompt": 0,
+              "completion": 0
+            },
+            "cost_usd": 0.0,
+            "timestamp": "2026-03-27T20:19:21.165922+00:00",
+            "framework": "unknown",
+            "error": null
+          }
+        ],
+        "trace_tree": {
+          "span": {
+            "span_id": "aa5ac37eacec4546",
+            "parent_span_id": null,
+            "span_type": "agent_step",
+            "input": {},
+            "output": {},
+            "latency_ms": 0.165606,
+            "token_count": {
+              "prompt": 0,
+              "completion": 0
+            },
+            "cost_usd": 0.0,
+            "timestamp": "2026-03-27T20:19:21.165922+00:00",
+            "framework": "unknown",
+            "error": null
+          },
+          "children": [
+            {
+              "span": {
+                "span_id": "c27af8b9e871c551",
+                "parent_span_id": "aa5ac37eacec4546",
+                "span_type": "tool_call",
+                "input": {
+                  "tool_name": "search"
+                },
+                "output": {
+                  "result": "some search result"
+                },
+                "latency_ms": 0.009956,
+                "token_count": {
+                  "prompt": 0,
+                  "completion": 0
+                },
+                "cost_usd": 0.0,
+                "timestamp": "2026-03-27T20:19:21.165997+00:00",
+                "framework": "unknown",
+                "error": null
+              },
+              "children": []
+            },
+            {
+              "span": {
+                "span_id": "48a6bf9cd5979308",
+                "parent_span_id": "aa5ac37eacec4546",
+                "span_type": "tool_call",
+                "input": {
+                  "tool_name": "lookup"
+                },
+                "output": {
+                  "result": "some lookup result"
+                },
+                "latency_ms": 0.010329,
+                "token_count": {
+                  "prompt": 0,
+                  "completion": 0
+                },
+                "cost_usd": 0.0,
+                "timestamp": "2026-03-27T20:19:21.166064+00:00",
+                "framework": "unknown",
+                "error": null
+              },
+              "children": []
+            }
+          ]
+        },
+        "total_latency_ms": 0.185891,
+        "total_cost_usd": 0.0,
+        "total_tokens": 0,
+        "outcome": "success"
+      },
+      "error": null
+    },
+    {
+      "task_id": "t3",
+      "metric_scores": {
+        "tool_selection_accuracy": 1.0,
+        "step_efficiency": 1.0
+      },
+      "passed": {
+        "tool_selection_accuracy": true,
+        "step_efficiency": true
+      },
+      "failure_types": [],
+      "trace": {
+        "session_id": "t3",
+        "task": "What is Z?",
+        "spans": [
+          {
+            "span_id": "02a420b55afbe0df",
+            "parent_span_id": "cfcbc21bb169347b",
+            "span_type": "tool_call",
+            "input": {
+              "tool_name": "search"
+            },
+            "output": {
+              "result": "some search result"
+            },
+            "latency_ms": 0.007892,
+            "token_count": {
+              "prompt": 0,
+              "completion": 0
+            },
+            "cost_usd": 0.0,
+            "timestamp": "2026-03-27T20:19:21.166930+00:00",
+            "framework": "unknown",
+            "error": null
+          },
+          {
+            "span_id": "01f95c70c190e03d",
+            "parent_span_id": "cfcbc21bb169347b",
+            "span_type": "tool_call",
+            "input": {
+              "tool_name": "lookup"
+            },
+            "output": {
+              "result": "some lookup result"
+            },
+            "latency_ms": 0.005638,
+            "token_count": {
+              "prompt": 0,
+              "completion": 0
+            },
+            "cost_usd": 0.0,
+            "timestamp": "2026-03-27T20:19:21.166992+00:00",
+            "framework": "unknown",
+            "error": null
+          },
+          {
+            "span_id": "cfcbc21bb169347b",
+            "parent_span_id": null,
+            "span_type": "agent_step",
+            "input": {},
+            "output": {},
+            "latency_ms": 0.137217,
+            "token_count": {
+              "prompt": 0,
+              "completion": 0
+            },
+            "cost_usd": 0.0,
+            "timestamp": "2026-03-27T20:19:21.166872+00:00",
+            "framework": "unknown",
+            "error": null
+          }
+        ],
+        "trace_tree": {
+          "span": {
+            "span_id": "cfcbc21bb169347b",
+            "parent_span_id": null,
+            "span_type": "agent_step",
+            "input": {},
+            "output": {},
+            "latency_ms": 0.137217,
+            "token_count": {
+              "prompt": 0,
+              "completion": 0
+            },
+            "cost_usd": 0.0,
+            "timestamp": "2026-03-27T20:19:21.166872+00:00",
+            "framework": "unknown",
+            "error": null
+          },
+          "children": [
+            {
+              "span": {
+                "span_id": "02a420b55afbe0df",
+                "parent_span_id": "cfcbc21bb169347b",
+                "span_type": "tool_call",
+                "input": {
+                  "tool_name": "search"
+                },
+                "output": {
+                  "result": "some search result"
+                },
+                "latency_ms": 0.007892,
+                "token_count": {
+                  "prompt": 0,
+                  "completion": 0
+                },
+                "cost_usd": 0.0,
+                "timestamp": "2026-03-27T20:19:21.166930+00:00",
+                "framework": "unknown",
+                "error": null
+              },
+              "children": []
+            },
+            {
+              "span": {
+                "span_id": "01f95c70c190e03d",
+                "parent_span_id": "cfcbc21bb169347b",
+                "span_type": "tool_call",
+                "input": {
+                  "tool_name": "lookup"
+                },
+                "output": {
+                  "result": "some lookup result"
+                },
+                "latency_ms": 0.005638,
+                "token_count": {
+                  "prompt": 0,
+                  "completion": 0
+                },
+                "cost_usd": 0.0,
+                "timestamp": "2026-03-27T20:19:21.166992+00:00",
+                "framework": "unknown",
+                "error": null
+              },
+              "children": []
+            }
+          ]
+        },
+        "total_latency_ms": 0.150747,
+        "total_cost_usd": 0.0,
+        "total_tokens": 0,
+        "outcome": "success"
+      },
+      "error": null
+    }
+  ],
+  "aggregate_scores": {
+    "tool_selection_accuracy": 0.6666666666666666,
+    "step_efficiency": 0.8888888888888888
+  },
+  "failure_dist": {},
+  "total_cost_usd": 0.0,
+  "total_tokens": 0,
+  "duration_s": 0.004844522001803853
+}

@@ -1,10 +1,7 @@
-"""``EvalTask`` dataclass: prompt, constraints, gold references, metadata."""
+"""Dataset package re-exports ``EvalTask`` from runner models for ergonomic imports."""
 
-from dataclasses import dataclass
+from __future__ import annotations
 
+from agentrace.runner.models import EvalTask
 
-@dataclass
-class EvalTask:
-    """Single evaluation example for runner consumption."""
-
-    pass  # TODO: fields (id, instruction, tools_allowed, gold, ...)
+__all__ = ["EvalTask"]

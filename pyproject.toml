@@ -12,6 +12,7 @@ license = { text = "Apache-2.0" }
 authors = [{ name = "AgentRace contributors" }]
 keywords = ["llm", "agents", "evaluation", "tracing", "observability"]
 dependencies = [
+    "opentelemetry-api>=1.20.0",
     "opentelemetry-sdk>=1.20.0",
     "typer>=0.9.0",
     "rich>=13.0.0",
