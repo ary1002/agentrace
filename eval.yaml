@@ -1,0 +1,9 @@
+# Example AgentRace evaluation config (schema: agentrace.config — TODO).
+# Async-first runner; storage and judge models configured here.
+
+version: 1
+# TODO: dataset path or benchmark preset
+# TODO: parallelism, checkpoint path (SQLite)
+# TODO: judge model (litellm model string)
+# TODO: metrics: deterministic + llm_judge toggles
+# TODO: team mode postgres URL (optional)
