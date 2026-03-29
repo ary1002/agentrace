@@ -23,6 +23,16 @@ _active_tracer: ContextVar[OtelTracer | None] = ContextVar(
 )
 
 
+def peek_active_tracer() -> OtelTracer | None:
+    """Return the session tracer when inside :func:`trace`, else ``None``.
+
+    Used by :func:`agentrace.capture.adapters._span_utils.get_tracer` so SDK patches
+    attach to the in-memory exporter without replacing the process-global
+    ``TracerProvider`` (which OpenTelemetry allows only once).
+    """
+    return _active_tracer.get()
+
+
 def current_tracer() -> OtelTracer:
     """Return the ``Tracer`` for the innermost active :func:`trace` block.
 
@@ -47,10 +57,9 @@ class TraceContext:
 class _TraceAsyncContextManager(AbstractAsyncContextManager[TraceContext]):
     """Uses a dedicated ``TracerProvider`` with in-memory export for one async block.
 
-    A separate provider is used for each session so multiple ``trace()`` blocks can run
-    reliably (the global provider can only be set once in ``opentelemetry.trace``).
-    Child spans created with :meth:`Tracer.start_as_current_span` on this tracer are
-    exported to the same in-memory exporter.
+    A separate provider is used for each session. The session tracer is published via
+    :func:`peek_active_tracer` so adapter code calling :func:`get_tracer` in
+    ``_span_utils`` records spans on this provider.
     """
 
     def __init__(self, session_id: str, task: str) -> None:

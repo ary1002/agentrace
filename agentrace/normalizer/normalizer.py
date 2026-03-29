@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from datetime import datetime, timezone
 from typing import Literal, cast, Mapping, Any
 
@@ -27,11 +28,31 @@ class Normalizer:
     def build(cls, session_id: str, task: str, raw_spans: list[ReadableSpan]) -> AgentTrace:
         spans: list[Span] = [cls._convert_readable(r) for r in raw_spans]
         roots = [s for s in spans if s.parent_span_id is None]
-        if len(roots) != 1:
-            raise MalformedTraceError(
-                f"expected exactly one root span (parent_span_id is None), found {len(roots)}"
+        if len(roots) == 0:
+            raise MalformedTraceError("No root span found")
+        if len(roots) > 1:
+            min_ts = min(s.timestamp for s in spans)
+            virtual = Span(
+                span_id="virtual_root",
+                parent_span_id=None,
+                span_type="agent_step",
+                input={},
+                output={},
+                latency_ms=0.0,
+                token_count=TokenCount(0, 0),
+                cost_usd=0.0,
+                timestamp=min_ts,
+                framework="agentrace",
+                error=None,
             )
-        root_id = roots[0].span_id
+            reparented = [
+                replace(s, parent_span_id="virtual_root") if s.parent_span_id is None else s
+                for s in spans
+            ]
+            spans = [virtual] + reparented
+            root_id = "virtual_root"
+        else:
+            root_id = roots[0].span_id
 
         nodes: dict[str, SpanNode] = {s.span_id: SpanNode(span=s) for s in spans}
         root_node = nodes[root_id]

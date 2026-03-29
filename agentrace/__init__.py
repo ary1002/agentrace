@@ -19,6 +19,22 @@ except ImportError:
 else:
     evaluate = getattr(_runner_mod, "evaluate", None)
 
+# Auto-patch OpenAI and Anthropic SDKs if installed
+# These are no-ops if the libraries are not installed
+from agentrace.capture.adapters.anthropic_sdk import patch_anthropic
+from agentrace.capture.adapters.openai_sdk import patch_openai
+
+patch_openai()
+patch_anthropic()
+
+# Expose adapter surface at top level for ergonomic imports
+from agentrace.capture.adapters import (
+    AgentTraceCallbackHandler,
+    instrument_crew,
+    instrument_graph,
+    traced_node,
+)
+
 __version__ = "0.1.0"
 
 __all__ = [
@@ -35,4 +51,8 @@ __all__ = [
     "MetricResult",
     "FailureType",
     "FailureRecord",
+    "AgentTraceCallbackHandler",
+    "traced_node",
+    "instrument_graph",
+    "instrument_crew",
 ]
