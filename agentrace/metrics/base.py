@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Any, ClassVar
+from dataclasses import dataclass, field
+from typing import Any, ClassVar, Optional
 
 
 @dataclass
@@ -16,6 +16,9 @@ class MetricResult:
     passed: bool
     reason: str
     evidence: list[str]
+    wasted_steps: list[str] = field(default_factory=list)
+    optimal_path: list[str] = field(default_factory=list)
+    deviation_reason: str = ""
 
 
 class BaseMetric(ABC):
@@ -25,7 +28,12 @@ class BaseMetric(ABC):
     default_threshold: ClassVar[float]
 
     @abstractmethod
-    async def compute(self, trace: Any, expected: Any | None = None) -> MetricResult:
+    async def compute(
+        self,
+        trace: Any,
+        expected: Optional[Any] = None,
+        judge: Optional[Any] = None,
+    ) -> MetricResult:
         """Score ``trace``; ``expected`` is typically an ``EvalTask`` when available."""
 
     def passes(self, score: float) -> bool:

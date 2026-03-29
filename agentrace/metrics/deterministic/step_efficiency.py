@@ -17,7 +17,12 @@ class StepEfficiency(BaseMetric):
     def _effective_threshold(self) -> float:
         return getattr(self, "_run_threshold", type(self).default_threshold)
 
-    async def compute(self, trace: Any, expected: Any | None = None) -> MetricResult:
+    async def compute(
+        self,
+        trace: Any,
+        expected: Any | None = None,
+        judge: Any | None = None,
+    ) -> MetricResult:
         thr = self._effective_threshold()
 
         actual_steps = len(trace.spans)

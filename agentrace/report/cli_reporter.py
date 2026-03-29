@@ -94,6 +94,64 @@ class CLIReporter:
 
         self.console.print(table)
 
+        if result.failure_dist:
+            total_cases = sum(result.failure_dist.values())
+            sorted_types = sorted(
+                result.failure_dist.items(),
+                key=lambda x: (-x[1], x[0]),
+            )
+            top_type, top_n = sorted_types[0]
+            top_pct = 100.0 * top_n / total_cases if total_cases else 0.0
+
+            div = Text("─────────────────────────────────────────", style=Style(dim=True))
+            self.console.print(div)
+            title = Text("FAILURE BREAKDOWN\n", style=Style(bold=True))
+            self.console.print(title)
+            top_line = Text()
+            top_line.append("Top failure type: ", style=Style(dim=True))
+            top_line.append(top_type, style=Style(bold=True))
+            top_line.append(
+                f" ({top_n} cases, {top_pct:.0f}%)",
+                style=Style(dim=True),
+            )
+            self.console.print(top_line)
+            self.console.print()
+
+            critical_types = frozenset(
+                {
+                    "HALLUCINATED_TOOL_CALL",
+                    "PREMATURE_TERMINATION",
+                    "FAITHFULNESS_FAILURE",
+                }
+            )
+            moderate_types = frozenset(
+                {
+                    "WRONG_TOOL_SELECTED",
+                    "CORRECT_TOOL_WRONG_ARGS",
+                    "REASONING_BREAK",
+                    "CONTEXT_OVERFLOW",
+                }
+            )
+
+            for ft, count in sorted_types:
+                pct = 100.0 * count / total_cases if total_cases else 0.0
+                filled = min(10, max(0, round(pct / 10)))
+                bar = "█" * filled + "░" * (10 - filled)
+                if ft in critical_types:
+                    style = "red"
+                elif ft in moderate_types:
+                    style = "yellow"
+                elif ft == "REDUNDANT_LOOP":
+                    style = "dim"
+                else:
+                    style = "dim"
+                line = Text()
+                line.append(f"{ft:24} ", style=style)
+                line.append(f"{bar}  ", style=style)
+                line.append(f"{count:3} cases  {pct:3.0f}%", style=style)
+                self.console.print(line)
+            self.console.print(div)
+
         per_task_cost = result.total_cost_usd / max(n_tasks, 1)
         cost_line = Text()
         cost_line.append("  ", style=Style(dim=True))

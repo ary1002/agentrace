@@ -5,13 +5,17 @@ from __future__ import annotations
 import json
 import os
 import time
+from collections import Counter
 from dataclasses import asdict
 from datetime import datetime
 from typing import Awaitable, Callable, Any
 
 import agentrace
+from agentrace.classifier import FailureClassifier
 from agentrace.dataset.dataset import Dataset
-from agentrace.metrics.deterministic import METRICS_REGISTRY
+from agentrace.metrics.base import MetricResult
+from agentrace.metrics.deterministic import LLM_METRIC_NAMES, METRICS_REGISTRY
+from agentrace.metrics.llm_judge.judge_client import JudgeClient
 from agentrace.runner.models import EvalResult, TaskResult
 
 
@@ -36,7 +40,7 @@ async def evaluate(
 ) -> EvalResult:
     """Run each task with ``agentrace.trace``, score with named metrics, aggregate results."""
 
-    _ = judge_model, concurrency, checkpoint_dir
+    _ = concurrency, checkpoint_dir
 
     resolved_metrics: list[Any] = []
     for name in metrics:
@@ -52,6 +56,10 @@ async def evaluate(
             setattr(inst, "_run_threshold", float(type(inst).default_threshold))
         resolved_metrics.append(inst)
 
+    needs_judge = any(m.name in LLM_METRIC_NAMES for m in resolved_metrics)
+    judge = JudgeClient(model=judge_model, temperature=0.0) if needs_judge else None
+    classifier = FailureClassifier(judge=judge, run_stage2=(judge is not None))
+
     task_results: list[TaskResult] = []
     start_time = time.monotonic()
 
@@ -63,17 +71,30 @@ async def evaluate(
 
             metric_scores: dict[str, float] = {}
             passed: dict[str, bool] = {}
+            metric_result_by_name: dict[str, MetricResult] = {}
+
             for metric in resolved_metrics:
-                result = await metric.compute(agent_trace, task)
+                result = await metric.compute(agent_trace, task, judge=judge)
+                metric_result_by_name[metric.name] = result
                 metric_scores[metric.name] = result.score
                 passed[metric.name] = result.passed
+
+            wasted_steps: list[str] = []
+            for r in metric_result_by_name.values():
+                wasted_steps.extend(r.wasted_steps)
+
+            failure_records = await classifier.classify(
+                agent_trace,
+                task.id,
+                wasted_step_ids=wasted_steps,
+            )
 
             task_results.append(
                 TaskResult(
                     task_id=task.id,
                     metric_scores=metric_scores,
                     passed=passed,
-                    failure_types=[],
+                    failure_types=[rec.failure_type.value for rec in failure_records],
                     trace=agent_trace,
                     error=None,
                 )
@@ -110,13 +131,16 @@ async def evaluate(
     duration_s = time.monotonic() - start_time
 
     run_id = f"run_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
+    all_failure_types = [ft for tr in task_results for ft in tr.failure_types]
+    failure_dist = dict(Counter(all_failure_types))
+
     result = EvalResult(
         run_id=run_id,
         dataset_id=dataset.id,
         timestamp=datetime.utcnow(),
         task_results=task_results,
         aggregate_scores=aggregate_scores,
-        failure_dist={},
+        failure_dist=failure_dist,
         total_cost_usd=total_cost_usd,
         total_tokens=total_tokens,
         duration_s=duration_s,

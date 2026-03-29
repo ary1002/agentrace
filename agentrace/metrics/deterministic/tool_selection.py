@@ -24,7 +24,12 @@ class ToolSelectionAccuracy(BaseMetric):
             return True
         return False
 
-    async def compute(self, trace: Any, expected: Any | None = None) -> MetricResult:
+    async def compute(
+        self,
+        trace: Any,
+        expected: Any | None = None,
+        judge: Any | None = None,
+    ) -> MetricResult:
         thr = self._effective_threshold()
 
         tool_spans = [s for s in trace.spans if s.span_type == "tool_call"]
