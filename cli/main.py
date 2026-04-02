@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import typer
 
-from cli.run import run
+from cli.benchmark import benchmark
+from cli.diff import diff
+from cli.run import run, runs
 
 app = typer.Typer(
     name="agentrace",
@@ -13,18 +15,9 @@ app = typer.Typer(
 )
 
 app.command("run")(run)
-
-
-@app.command("benchmark")
-def benchmark() -> None:
-    """Placeholder for bundled benchmark suites."""
-    typer.echo("coming soon")
-
-
-@app.command("diff")
-def diff() -> None:
-    """Placeholder for comparing eval JSON exports."""
-    typer.echo("coming soon")
+app.command("runs")(runs)
+app.command("benchmark")(benchmark)
+app.command("diff")(diff)
 
 
 def main() -> None:

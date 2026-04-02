@@ -46,6 +46,193 @@ def _strip_json_fences(text: str) -> str:
     return t.strip()
 
 
+def _message_content_as_text(content: Any) -> str:
+    """Normalize ``choice.message.content`` (str or provider-specific list of blocks)."""
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts: list[str] = []
+        for block in content:
+            if isinstance(block, dict):
+                t = block.get("text")
+                if t is None and isinstance(block.get("content"), str):
+                    t = block.get("content")
+                if t is not None:
+                    parts.append(str(t))
+                elif block.get("type") == "text" and "text" in block:
+                    parts.append(str(block["text"]))
+            else:
+                parts.append(str(block))
+        return "".join(parts)
+    return str(content or "")
+
+
+def _schema_expects_list_value(response_schema: dict[str, Any]) -> bool:
+    for v in response_schema.values():
+        if v is list:
+            return True
+        if isinstance(v, str) and "list" in v.lower():
+            return True
+    return False
+
+
+def _flatten_scalar_fields(obj: Any, out: dict[str, Any], depth: int = 0) -> None:
+    """Collect string-keyed scalar / non-object list values; skip list-of-dict arrays."""
+    if depth > 16:
+        return
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if not isinstance(k, str):
+                continue
+            if isinstance(v, dict):
+                _flatten_scalar_fields(v, out, depth + 1)
+            elif isinstance(v, list):
+                if v and isinstance(v[0], dict):
+                    continue
+                out[k] = v
+            else:
+                out[k] = v
+    elif isinstance(obj, list):
+        for it in obj:
+            if isinstance(it, dict):
+                _flatten_scalar_fields(it, out, depth)
+
+
+def _normalize_key(s: str) -> str:
+    return str(s).lower().strip().replace(" ", "_").replace("-", "_")
+
+
+_SCORE_KEY_ALIASES: tuple[str, ...] = (
+    "score",
+    "quality_score",
+    "quality",
+    "rating",
+    "value",
+    "overall_score",
+    "evaluation_score",
+    "numeric_score",
+    "score_value",
+    "confidence",
+)
+
+_REASONING_KEY_ALIASES: tuple[str, ...] = (
+    "reasoning",
+    "explanation",
+    "rationale",
+    "summary",
+    "comment",
+    "analysis",
+    "justification",
+    "notes",
+)
+
+_SUGGESTED_FIX_ALIASES: tuple[str, ...] = (
+    "suggested_fix",
+    "fix",
+    "recommendation",
+    "action",
+    "remediation",
+)
+
+
+def _lookup_flat(flat: dict[str, Any], *aliases: str) -> Any:
+    norm_to_val: dict[str, Any] = {}
+    for k, v in flat.items():
+        norm_to_val[_normalize_key(k)] = v
+    for a in aliases:
+        nk = _normalize_key(a)
+        if nk in norm_to_val:
+            return norm_to_val[nk]
+    return None
+
+
+def _fill_required_from_flat_aliases(
+    flat: dict[str, Any], response_schema: dict[str, Any]
+) -> dict[str, Any]:
+    """Map common alternate key names onto canonical schema keys."""
+    out: dict[str, Any] = dict(flat)
+    required = set(response_schema.keys())
+    for req in required:
+        if req in out and out[req] is not None and out[req] != "":
+            continue
+        v: Any = None
+        if req == "score":
+            v = _lookup_flat(flat, *_SCORE_KEY_ALIASES)
+        elif req == "reasoning":
+            v = _lookup_flat(flat, *_REASONING_KEY_ALIASES)
+        elif req == "suggested_fix":
+            v = _lookup_flat(flat, *_SUGGESTED_FIX_ALIASES)
+        else:
+            v = _lookup_flat(flat, req)
+        if v is not None:
+            out[req] = v
+    return out
+
+
+def _coerce_parsed_for_schema(parsed: Any, response_schema: dict[str, Any]) -> dict[str, Any]:
+    """Return a flat dict that contains all ``response_schema`` keys.
+
+    Models often wrap the payload (e.g. ``{{"result": {{"score": ...}}}}``),
+    return a one-element list, or split fields between the root and a nested
+    object. Unwrap/merge before key validation.
+    """
+    required = set(response_schema.keys())
+
+    if isinstance(parsed, list):
+        if len(parsed) == 1 and isinstance(parsed[0], dict):
+            parsed = parsed[0]
+        else:
+            raise JudgeParseError("expected a JSON object or a single-element array of objects")
+
+    if not isinstance(parsed, dict):
+        raise JudgeParseError("expected JSON object")
+
+    if required <= parsed.keys():
+        return parsed
+
+    for v in parsed.values():
+        if isinstance(v, dict) and required <= v.keys():
+            return dict(v)
+
+    merged: dict[str, Any] = dict(parsed)
+    for v in parsed.values():
+        if isinstance(v, dict):
+            merged.update(v)
+    if required <= merged.keys():
+        return merged
+
+    def _deep_find(obj: Any, depth: int = 0) -> dict[str, Any] | None:
+        if depth > 12:
+            return None
+        if isinstance(obj, dict):
+            if required <= obj.keys():
+                return obj
+            for v in obj.values():
+                got = _deep_find(v, depth + 1)
+                if got is not None:
+                    return got
+        if isinstance(obj, list):
+            for it in obj:
+                got = _deep_find(it, depth + 1)
+                if got is not None:
+                    return got
+        return None
+
+    found = _deep_find(parsed)
+    if found is not None:
+        return found
+
+    if not _schema_expects_list_value(response_schema):
+        flat: dict[str, Any] = {}
+        _flatten_scalar_fields(parsed, flat)
+        filled = _fill_required_from_flat_aliases(flat, response_schema)
+        if required <= filled.keys():
+            return filled
+
+    missing = sorted(required - set(parsed.keys()))
+    raise JudgeParseError(f"missing required keys: {missing}")
+
+
 @dataclass
 class JudgeResponse:
     raw: str
@@ -119,11 +306,10 @@ class JudgeClient:
             try:
                 choice = response.choices[0]
                 content = choice.message.content
-                raw = content if isinstance(content, str) else str(content or "")
+                raw = _message_content_as_text(content)
                 cleaned = _strip_json_fences(raw)
-                parsed = json.loads(cleaned)
-                if not isinstance(parsed, dict):
-                    raise json.JSONDecodeError("expected JSON object", cleaned, 0)
+                parsed_raw = json.loads(cleaned)
+                parsed = _coerce_parsed_for_schema(parsed_raw, response_schema)
                 self._validate_keys(parsed, response_schema)
                 usage = getattr(response, "usage", None)
                 pt = int(getattr(usage, "prompt_tokens", 0) or 0) if usage else 0

@@ -131,6 +131,6 @@ def patch_openai() -> None:
                 record_exception(span, e)
                 raise
 
-    Completions.create = patched_sync
-    AsyncCompletions.create = patched_async
+    Completions.create = patched_sync  # type: ignore[method-assign, assignment]
+    AsyncCompletions.create = patched_async  # type: ignore[method-assign, assignment]
     _openai_patched = True

@@ -1,6 +1,10 @@
-"""50-task web research benchmark suite stub.
+"""Web research benchmark suite (50 tasks)."""
 
-TODO: define task IDs and references; load from packaged JSON or code table.
-"""
+from __future__ import annotations
 
-# TODO: WEB_RESEARCH_SUITE: list[EvalTask] | Dataset factory
+from agentrace.dataset.benchmarks._base import load_benchmark
+from agentrace.dataset.dataset import Dataset
+
+
+def load() -> Dataset:
+    return load_benchmark("web_research.json")

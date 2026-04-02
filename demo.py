@@ -1,13 +1,3 @@
-"""Demo: run evaluate with a fake agent that emits tool-like spans.
-
-Do not nest ``agentrace.trace()`` inside the agent while ``evaluate()`` already
-wraps the call in ``trace()``: the inner session uses a separate OTel provider,
-and the inner root span inherits the outer span as parent, so the inner export
-batch has no span with ``parent_span_id is None`` and normalization fails.
-
-Use ``current_tracer()`` to create child spans on the same session tracer instead.
-"""
-
 from __future__ import annotations
 
 import asyncio

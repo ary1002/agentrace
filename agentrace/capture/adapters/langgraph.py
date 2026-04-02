@@ -42,6 +42,7 @@ def traced_node(name: str | None = None):
                 state = args[0] if args else {}
                 input_dict = {
                     "node": node_name,
+                    "node_name": node_name,
                     "state_keys": (
                         list(state.keys()) if isinstance(state, dict) else str(type(state))
                     ),
@@ -77,6 +78,7 @@ def traced_node(name: str | None = None):
             state = args[0] if args else {}
             input_dict = {
                 "node": node_name,
+                "node_name": node_name,
                 "state_keys": (
                     list(state.keys()) if isinstance(state, dict) else str(type(state))
                 ),

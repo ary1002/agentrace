@@ -27,7 +27,32 @@ from agentrace.capture.adapters._span_utils import (
 _LOG = logging.getLogger(__name__)
 
 
-def _llm_model_name(serialized: dict[str, Any]) -> str:
+def _tool_end_output_as_str(output: Any) -> str:
+    """Normalize LangChain tool return values (str, ToolMessage, AIMessage, etc.) for span export."""
+    if output is None:
+        return "[tool] returned None"
+    if isinstance(output, str):
+        return output if output.strip() else "[tool] returned empty string"
+    content = getattr(output, "content", None)
+    if isinstance(content, str):
+        return content if content.strip() else "[tool] returned empty content"
+    if isinstance(content, list):
+        bits: list[str] = []
+        for part in content:
+            if isinstance(part, dict) and part.get("type") == "text" and part.get("text"):
+                bits.append(str(part["text"]))
+            elif hasattr(part, "text"):
+                bits.append(str(getattr(part, "text", "")))
+        joined = "".join(bits)
+        if joined.strip():
+            return joined
+    s = str(output)
+    return s if s.strip() else "[tool] empty serialized output"
+
+
+def _llm_model_name(serialized: dict[str, Any] | None) -> str:
+    if serialized is None:
+        serialized = {}
     name = serialized.get("name")
     if name:
         return str(name)
@@ -41,7 +66,10 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
     """Maps LangChain callback events to OpenTelemetry spans (``agentrace`` tracer)."""
 
     def __init__(self) -> None:
-        self._spans: dict[str, Any] = {}
+        # Separate maps so the same ``run_id`` namespace cannot collide across LLM / tool / chain.
+        self._llm_spans: dict[str, tuple[Any, Any]] = {}
+        self._tool_spans: dict[str, tuple[Any, Any]] = {}
+        self._chain_spans: dict[str, tuple[Any, Any]] = {}
         self._tracer: Any = None
         self._llm_models: dict[str, str] = {}
         if not _AVAILABLE:
@@ -54,7 +82,7 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
 
     def on_llm_start(
         self,
-        serialized: dict[str, Any],
+        serialized: dict[str, Any] | None,
         prompts: list[str],
         *,
         run_id: UUID,
@@ -68,7 +96,7 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
         ctx = otel_trace.use_span(span, end_on_exit=False)
         ctx.__enter__()
         key = str(run_id)
-        self._spans[key] = (span, ctx)
+        self._llm_spans[key] = (span, ctx)
         self._llm_models[key] = model_name
         inp = {"model": model_name, "prompts": prompts}
         span.set_attribute("agentrace.span_type", "llm_call")
@@ -79,7 +107,7 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
         if not _AVAILABLE:
             return
         key = str(run_id)
-        pair = self._spans.pop(key, (None, None))
+        pair = self._llm_spans.pop(key, (None, None))
         if pair == (None, None):
             return
         span, ctx = pair
@@ -115,7 +143,7 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
         if not _AVAILABLE:
             return
         key = str(run_id)
-        pair = self._spans.pop(key, (None, None))
+        pair = self._llm_spans.pop(key, (None, None))
         if pair == (None, None):
             return
         span, ctx = pair
@@ -128,7 +156,7 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
 
     def on_tool_start(
         self,
-        serialized: dict[str, Any],
+        serialized: dict[str, Any] | None,
         input_str: str,
         *,
         run_id: UUID,
@@ -136,12 +164,14 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
     ) -> None:
         if not _AVAILABLE:
             return
+        if serialized is None:
+            serialized = {}
         tool_name = str(serialized.get("name", "tool"))
         tracer = self._get_tracer()
         span = tracer.start_span(f"tool/{tool_name}")
         ctx = otel_trace.use_span(span, end_on_exit=False)
         ctx.__enter__()
-        self._spans[str(run_id)] = (span, ctx)
+        self._tool_spans[str(run_id)] = (span, ctx)
         inp = {"tool_name": tool_name, "input": input_str}
         span.set_attribute("agentrace.span_type", "tool_call")
         span.set_attribute("agentrace.framework", "langchain")
@@ -151,12 +181,13 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
         if not _AVAILABLE:
             return
         key = str(run_id)
-        pair = self._spans.pop(key, (None, None))
+        pair = self._tool_spans.pop(key, (None, None))
         if pair == (None, None):
             return
         span, ctx = pair
         try:
-            output_dict = {"output": str(output)}
+            text_out = _tool_end_output_as_str(output)
+            output_dict = {"result": text_out, "output": text_out}
             set_span_attributes(
                 span,
                 "tool_call",
@@ -173,7 +204,7 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
         if not _AVAILABLE:
             return
         key = str(run_id)
-        pair = self._spans.pop(key, (None, None))
+        pair = self._tool_spans.pop(key, (None, None))
         if pair == (None, None):
             return
         span, ctx = pair
@@ -185,21 +216,23 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
 
     def on_chain_start(
         self,
-        serialized: dict[str, Any],
-        inputs: dict[str, Any],
+        serialized: dict[str, Any] | None,
+        inputs: dict[str, Any] | None,
         *,
         run_id: UUID,
         **kwargs: Any,
     ) -> None:
         if not _AVAILABLE:
             return
+        if serialized is None:
+            serialized = {}
         chain_name = str(serialized.get("name", "chain"))
         tracer = self._get_tracer()
         span = tracer.start_span(f"langchain/{chain_name}")
         ctx = otel_trace.use_span(span, end_on_exit=False)
         ctx.__enter__()
-        self._spans[str(run_id)] = (span, ctx)
-        inp = {"chain": chain_name, "inputs": inputs}
+        self._chain_spans[str(run_id)] = (span, ctx)
+        inp = {"chain": chain_name, "inputs": inputs or {}}
         span.set_attribute("agentrace.span_type", "agent_step")
         span.set_attribute("agentrace.framework", "langchain")
         span.set_attribute("agentrace.input", _json_truncate(inp))
@@ -208,7 +241,7 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
         if not _AVAILABLE:
             return
         key = str(run_id)
-        pair = self._spans.pop(key, (None, None))
+        pair = self._chain_spans.pop(key, (None, None))
         if pair == (None, None):
             return
         span, ctx = pair
@@ -230,7 +263,7 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
         if not _AVAILABLE:
             return
         key = str(run_id)
-        pair = self._spans.pop(key, (None, None))
+        pair = self._chain_spans.pop(key, (None, None))
         if pair == (None, None):
             return
         span, ctx = pair

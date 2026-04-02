@@ -1,0 +1,540 @@
+[
+  {
+    "id": "rag_001",
+    "query": "According to the provided documents, what year was Project Helios authorized?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "single-hop"
+    ],
+    "difficulty": "easy",
+    "expected_answer": "Per the canonical doc set, Project Helios was authorized in 2019."
+  },
+  {
+    "id": "rag_002",
+    "query": "Per the internal wiki excerpt, what is the maximum batch size for inference server v3?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "single-hop"
+    ],
+    "difficulty": "easy",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_003",
+    "query": "From the policy PDF summary, what is the data retention period for user logs?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 2,
+    "tags": [
+      "single-hop"
+    ],
+    "difficulty": "easy",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_004",
+    "query": "According to the product spec, which encryption algorithm is used at rest?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "single-hop"
+    ],
+    "difficulty": "easy",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_005",
+    "query": "From the onboarding doc, how many days of PTO do new hires receive in year one?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "single-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_006",
+    "query": "Per the incident report, what was the root cause code for OUT-4421?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 2,
+    "tags": [
+      "single-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_007",
+    "query": "According to the glossary, what does the acronym RAG stand for in this corpus?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "single-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_008",
+    "query": "From the SLA document, what is the promised uptime percentage?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "single-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_009",
+    "query": "Per the architecture diagram notes, which service owns authentication?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 2,
+    "tags": [
+      "single-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_010",
+    "query": "According to the compliance memo, which regulation is cited for breach notification timing?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "single-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_011",
+    "query": "From the sales playbook, what is the minimum contract term for enterprise tier?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "single-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_012",
+    "query": "Per the engineering guidelines, which linter configuration file is canonical?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 2,
+    "tags": [
+      "single-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_013",
+    "query": "Using the document corpus, combine information from two sources: what budget line funded initiative M-13 and who signed the approval?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "multi-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_014",
+    "query": "Using the document corpus, combine information from two sources: what budget line funded initiative M-14 and who signed the approval?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "multi-hop"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_015",
+    "query": "Using the document corpus, combine information from two sources: what budget line funded initiative M-15 and who signed the approval?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "multi-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_016",
+    "query": "Using the document corpus, combine information from two sources: what budget line funded initiative M-16 and who signed the approval?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "multi-hop"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_017",
+    "query": "Using the document corpus, combine information from two sources: what budget line funded initiative M-17 and who signed the approval?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "multi-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_018",
+    "query": "Using the document corpus, combine information from two sources: what budget line funded initiative M-18 and who signed the approval?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "multi-hop"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_019",
+    "query": "Using the document corpus, combine information from two sources: what budget line funded initiative M-19 and who signed the approval?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "multi-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_020",
+    "query": "Using the document corpus, combine information from two sources: what budget line funded initiative M-20 and who signed the approval?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "multi-hop"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_021",
+    "query": "Using the document corpus, combine information from two sources: what budget line funded initiative M-21 and who signed the approval?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "multi-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_022",
+    "query": "Using the document corpus, combine information from two sources: what budget line funded initiative M-22 and who signed the approval?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "multi-hop"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_023",
+    "query": "Using the document corpus, combine information from two sources: what budget line funded initiative M-23 and who signed the approval?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "multi-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_024",
+    "query": "Using the document corpus, combine information from two sources: what budget line funded initiative M-24 and who signed the approval?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "multi-hop"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_025",
+    "query": "Synthesize themes across multiple briefings (doc set) about regional risk trends for quarter Q-1: produce a concise executive summary without quoting verbatim.",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "abstractive"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_026",
+    "query": "Synthesize themes across multiple briefings (doc set) about regional risk trends for quarter Q-2: produce a concise executive summary without quoting verbatim.",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "abstractive"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_027",
+    "query": "Synthesize themes across multiple briefings (doc set) about regional risk trends for quarter Q-3: produce a concise executive summary without quoting verbatim.",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "abstractive"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_028",
+    "query": "Synthesize themes across multiple briefings (doc set) about regional risk trends for quarter Q-4: produce a concise executive summary without quoting verbatim.",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "abstractive"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_029",
+    "query": "Synthesize themes across multiple briefings (doc set) about regional risk trends for quarter Q-5: produce a concise executive summary without quoting verbatim.",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "abstractive"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_030",
+    "query": "Synthesize themes across multiple briefings (doc set) about regional risk trends for quarter Q-6: produce a concise executive summary without quoting verbatim.",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "abstractive"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_031",
+    "query": "Synthesize themes across multiple briefings (doc set) about regional risk trends for quarter Q-7: produce a concise executive summary without quoting verbatim.",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "abstractive"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_032",
+    "query": "Synthesize themes across multiple briefings (doc set) about regional risk trends for quarter Q-8: produce a concise executive summary without quoting verbatim.",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "abstractive"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_033",
+    "query": "According to the provided documents only, what is the boiling point of compound Z-33 under 10 atm?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 2,
+    "tags": [
+      "unanswerable"
+    ],
+    "difficulty": "medium",
+    "expected_answer": "The answer is not available in the provided documents."
+  },
+  {
+    "id": "rag_034",
+    "query": "According to the provided documents only, what is the boiling point of compound Z-34 under 10 atm?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 2,
+    "tags": [
+      "unanswerable"
+    ],
+    "difficulty": "medium",
+    "expected_answer": "The answer is not available in the provided documents."
+  },
+  {
+    "id": "rag_035",
+    "query": "According to the provided documents only, what is the boiling point of compound Z-35 under 10 atm?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 2,
+    "tags": [
+      "unanswerable"
+    ],
+    "difficulty": "medium",
+    "expected_answer": "The answer is not available in the provided documents."
+  },
+  {
+    "id": "rag_036",
+    "query": "According to the provided documents only, what is the boiling point of compound Z-36 under 10 atm?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 2,
+    "tags": [
+      "unanswerable"
+    ],
+    "difficulty": "medium",
+    "expected_answer": "The answer is not available in the provided documents."
+  },
+  {
+    "id": "rag_037",
+    "query": "According to the provided documents only, what is the boiling point of compound Z-37 under 10 atm?",
+    "expected_tools": [
+      "retriever"
+    ],
+    "optimal_steps": 2,
+    "tags": [
+      "unanswerable"
+    ],
+    "difficulty": "medium",
+    "expected_answer": "The answer is not available in the provided documents."
+  },
+  {
+    "id": "rag_038",
+    "query": "Documents A and B in the corpus disagree on whether policy P-38 allows remote work full-time. What does each say and how should an agent resolve the conflict?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "conflicting",
+      "multi-hop"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_039",
+    "query": "Documents A and B in the corpus disagree on whether policy P-39 allows remote work full-time. What does each say and how should an agent resolve the conflict?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "conflicting",
+      "multi-hop"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "rag_040",
+    "query": "Documents A and B in the corpus disagree on whether policy P-40 allows remote work full-time. What does each say and how should an agent resolve the conflict?",
+    "expected_tools": [
+      "retriever",
+      "retriever"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "conflicting",
+      "multi-hop"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  }
+]

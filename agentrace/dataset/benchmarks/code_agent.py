@@ -1,6 +1,10 @@
-"""30-task code-agent benchmark suite stub.
+"""Code agent benchmark suite (30 tasks)."""
 
-TODO: programming tasks with gold tests or references.
-"""
+from __future__ import annotations
 
-# TODO: CODE_AGENT_SUITE: list[EvalTask] | Dataset factory
+from agentrace.dataset.benchmarks._base import load_benchmark
+from agentrace.dataset.dataset import Dataset
+
+
+def load() -> Dataset:
+    return load_benchmark("code_agent.json")

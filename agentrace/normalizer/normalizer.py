@@ -36,7 +36,10 @@ class Normalizer:
                 span_id="virtual_root",
                 parent_span_id=None,
                 span_type="agent_step",
-                input={},
+                input={
+                    "node": "__virtual_root__",
+                    "node_name": "__virtual_root__",
+                },
                 output={},
                 latency_ms=0.0,
                 token_count=TokenCount(0, 0),

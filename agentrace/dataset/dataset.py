@@ -18,6 +18,10 @@ class Dataset:
         self._tasks = list(tasks)
 
     @property
+    def tasks(self) -> list[EvalTask]:
+        return list(self._tasks)
+
+    @property
     def id(self) -> str:
         raw = "".join(t.id for t in self._tasks)
         digest = hashlib.sha256(raw.encode()).hexdigest()

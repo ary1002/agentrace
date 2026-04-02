@@ -208,4 +208,8 @@ __marimo__/
 
 
 docs/
+*.db
 eval_results/
+*.bak
+checkpoints/
+v1_testing/

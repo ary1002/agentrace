@@ -1,0 +1,26 @@
+# Example AgentRace evaluation config (see agentrace.config / agentrace.storage).
+version: 1
+
+agent:
+  module: agentrace.demo_agent
+  function: my_agent
+
+dataset:
+  path: examples/dataset.json
+
+metrics:
+  - step_efficiency
+
+runner:
+  concurrency: 2
+  output_dir: ./eval_results/
+
+thresholds:
+  step_efficiency: 0.5
+
+judge:
+  model: claude-sonnet-4-20250514
+
+storage:
+  backend: sqlite
+  path: ./agentrace.db

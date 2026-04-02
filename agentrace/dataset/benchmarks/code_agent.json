@@ -1,0 +1,427 @@
+[
+  {
+    "id": "code_001",
+    "query": "Write a Python function `merge_intervals(intervals: list[tuple[int,int]]) -> list[tuple[int,int]]` that merges overlapping intervals. Include doctest-style examples.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "generation",
+      "python"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "code_002",
+    "query": "Implement a JavaScript function debounce(fn, ms) returning a debounced wrapper. Show usage.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "generation",
+      "javascript"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "code_003",
+    "query": "Write a SQL query listing customers who placed orders in the last 30 days with order counts.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "generation",
+      "sql"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "code_004",
+    "query": "Create a Python class `RingBuffer` with fixed capacity supporting push and iteration.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 7,
+    "tags": [
+      "generation",
+      "python"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "code_005",
+    "query": "Write a Python async function that fetches two URLs concurrently with asyncio and returns combined text lengths.",
+    "expected_tools": [
+      "code_executor",
+      "bash"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "generation",
+      "python"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "code_006",
+    "query": "Implement binary search in Python returning insertion index if missing.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "generation",
+      "python"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "code_007",
+    "query": "Write a shell script that prints disk usage of /var/log sorted descending.",
+    "expected_tools": [
+      "bash"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "generation",
+      "bash"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "code_008",
+    "query": "Implement Dijkstra shortest path for a weighted adjacency dict in Python.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "generation",
+      "python"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "code_009",
+    "query": "Write a TypeScript-style interface and function to validate email with a simple regex.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 7,
+    "tags": [
+      "generation",
+      "javascript"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "code_010",
+    "query": "Create Python pydantic model for User with email validation and JSON schema dump.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "generation",
+      "python"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "code_011",
+    "query": "Bug: Python function should return product of list but returns sum.\ndef prod(xs):\n    p = 0\n    for x in xs:\n        p += x\n    return p\nFix it.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "debugging",
+      "python"
+    ],
+    "difficulty": "easy",
+    "expected_answer": null
+  },
+  {
+    "id": "code_012",
+    "query": "JavaScript: function max(a,b){ return a > b ? b : a } \u2014 fix to return maximum.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "debugging",
+      "javascript"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "code_013",
+    "query": "SQL uses WHERE year = '2024' on integer column causing no rows \u2014 fix query pattern.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "debugging",
+      "sql"
+    ],
+    "difficulty": "easy",
+    "expected_answer": null
+  },
+  {
+    "id": "code_014",
+    "query": "Python off-by-one in range for inclusive end in factorial loop \u2014 identify and fix.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "debugging",
+      "python"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "code_015",
+    "query": "Recursive binary search uses mid = (lo+hi)//2 but never moves lo \u2014 fix.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "debugging",
+      "python"
+    ],
+    "difficulty": "easy",
+    "expected_answer": null
+  },
+  {
+    "id": "code_016",
+    "query": "JS fetch ignores await and returns Promise \u2014 fix async usage.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "debugging",
+      "javascript"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "code_017",
+    "query": "Python dict comprehension uses wrong key causing duplicates \u2014 fix.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "debugging",
+      "python"
+    ],
+    "difficulty": "easy",
+    "expected_answer": null
+  },
+  {
+    "id": "code_018",
+    "query": "Shell test `[ $x = 1 ]` fails on empty x \u2014 fix quoting/guards.",
+    "expected_tools": [
+      "bash"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "debugging",
+      "bash"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "code_019",
+    "query": "Write Python to parse integers from a messy string; first version may miss negatives \u2014 iterate until all edge cases pass.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 8,
+    "tags": [
+      "self-correction",
+      "python"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "code_020",
+    "query": "Implement JSON line counter; first attempt may double-count \u2014 refine with tests.",
+    "expected_tools": [
+      "file_read",
+      "code_executor"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "self-correction",
+      "python"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "code_021",
+    "query": "Normalize URLs in a file; initial regex misses ports \u2014 improve iteratively.",
+    "expected_tools": [
+      "file_read",
+      "file_write",
+      "code_executor"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "self-correction",
+      "python"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "code_022",
+    "query": "Compute rolling variance; naive formula numerically unstable \u2014 switch to Welford after failure.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "self-correction",
+      "python"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "code_023",
+    "query": "Sort case-insensitive; first try uppercases wrong locale \u2014 fix.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 7,
+    "tags": [
+      "self-correction",
+      "python"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "code_024",
+    "query": "Parse CSV with embedded commas; split breaks \u2014 use csv module after retry.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 8,
+    "tags": [
+      "self-correction",
+      "python"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "code_025",
+    "query": "Find duplicate files by hash; first hash may be slow \u2014 optimize after timing.",
+    "expected_tools": [
+      "bash",
+      "code_executor"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "self-correction",
+      "bash"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "code_026",
+    "query": "Explain what this Python does and its time complexity:\ndef f(n):\n    s=0\n    while n:\n        s+=n&1; n//=2\n    return s",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "explanation",
+      "python"
+    ],
+    "difficulty": "easy",
+    "expected_answer": "Counts set bits in binary representation of n; O(log n) divisions."
+  },
+  {
+    "id": "code_027",
+    "query": "Describe behavior and space complexity:\ndef g(xs):\n    return [x for i,x in enumerate(xs) if x not in xs[:i]]",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 2,
+    "tags": [
+      "explanation",
+      "python"
+    ],
+    "difficulty": "medium",
+    "expected_answer": "Removes duplicates preserving first occurrence; O(n^2) time and O(n) extra list space."
+  },
+  {
+    "id": "code_028",
+    "query": "Explain this JS closure and memory implications:\nfunction make(){const a=[];return x=>a.push(x)}",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "explanation",
+      "javascript"
+    ],
+    "difficulty": "medium",
+    "expected_answer": "Returns a function closing over array a; a lives as long as the returned function."
+  },
+  {
+    "id": "code_029",
+    "query": "What does this SQL return and why:\nSELECT COUNT(*) FROM t WHERE NULL = NULL",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "explanation",
+      "sql"
+    ],
+    "difficulty": "easy",
+    "expected_answer": "Returns zero because NULL comparisons are unknown in SQL."
+  },
+  {
+    "id": "code_030",
+    "query": "Explain quicksort pivot choice impact on worst-case time.",
+    "expected_tools": [
+      "code_executor"
+    ],
+    "optimal_steps": 2,
+    "tags": [
+      "explanation",
+      "python"
+    ],
+    "difficulty": "hard",
+    "expected_answer": "Bad pivot yields O(n^2); median-of-three or random pivot improves expected O(n log n)."
+  }
+]

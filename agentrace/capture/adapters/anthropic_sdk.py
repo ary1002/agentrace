@@ -70,20 +70,7 @@ def patch_anthropic() -> None:
                     int(completion_tokens),
                     cost,
                 )
-                for block in getattr(response, "content", None) or []:
-                    if getattr(block, "type", None) == "tool_use":
-                        bname = getattr(block, "name", "unknown")
-                        with tracer.start_as_current_span(f"tool/{bname}") as tspan:
-                            set_span_attributes(
-                                tspan,
-                                "tool_call",
-                                {
-                                    "tool_name": bname,
-                                    "input": getattr(block, "input", {}),
-                                },
-                                {},
-                                "anthropic",
-                            )
+                # tool_call spans belong around real tool execution, not around the LLM response.
                 return response
             except Exception as e:
                 record_exception(span, e)
@@ -116,25 +103,11 @@ def patch_anthropic() -> None:
                     int(completion_tokens),
                     cost,
                 )
-                for block in getattr(response, "content", None) or []:
-                    if getattr(block, "type", None) == "tool_use":
-                        bname = getattr(block, "name", "unknown")
-                        with tracer.start_as_current_span(f"tool/{bname}") as tspan:
-                            set_span_attributes(
-                                tspan,
-                                "tool_call",
-                                {
-                                    "tool_name": bname,
-                                    "input": getattr(block, "input", {}),
-                                },
-                                {},
-                                "anthropic",
-                            )
                 return response
             except Exception as e:
                 record_exception(span, e)
                 raise
 
-    Messages.create = patched_sync
-    AsyncMessages.create = patched_async
+    Messages.create = patched_sync  # type: ignore[method-assign, assignment]
+    AsyncMessages.create = patched_async  # type: ignore[method-assign, assignment]
     _anthropic_patched = True

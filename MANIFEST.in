@@ -1,0 +1,3 @@
+# Keep local-only trees out of the source distribution (wheel already limits packages).
+prune v1_testing
+prune examples

@@ -16,6 +16,15 @@ def _summarize(obj: Any, max_len: int) -> str:
     return s if len(s) <= max_len else s[: max_len - 3] + "..."
 
 
+def _span_output_for_prompt(out: Any) -> str:
+    if isinstance(out, dict):
+        for key in ("result", "output", "content"):
+            v = out.get(key)
+            if isinstance(v, str) and v.strip():
+                return v
+    return str(out) if out is not None else ""
+
+
 class ReasoningCoherence(BaseMetric):
     name = "reasoning_coherence"
     default_threshold = 0.75
@@ -25,7 +34,8 @@ class ReasoningCoherence(BaseMetric):
         lines: list[str] = []
         for span in ordered:
             inp = _summarize(span.input, 500)
-            out = _summarize(span.output, 500)
+            raw_out = _span_output_for_prompt(span.output) if span.span_type == "tool_call" else span.output
+            out = _summarize(raw_out, 500)
             lines.append(
                 f"- [{span.span_type}] input_summary={inp!r} output_summary={out!r}"
             )

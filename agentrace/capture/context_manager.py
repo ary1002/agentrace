@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from contextlib import AbstractAsyncContextManager
 from contextvars import ContextVar, Token
 from dataclasses import dataclass
@@ -83,6 +84,11 @@ class _TraceAsyncContextManager(AbstractAsyncContextManager[TraceContext]):
             attributes={
                 "agentrace.session_id": self._session_id,
                 "agentrace.task": self._task,
+                "agentrace.framework": "agentrace",
+                "agentrace.input": json.dumps(
+                    {"node": "__session_root__", "node_name": "__session_root__"}
+                ),
+                "agentrace.output": "{}",
             },
         )
         assert self._span_cm is not None

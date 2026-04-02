@@ -1,6 +1,10 @@
-"""40-task RAG benchmark suite stub.
+"""RAG agent benchmark suite (40 tasks)."""
 
-TODO: retrieval-heavy QA with document IDs and gold spans.
-"""
+from __future__ import annotations
 
-# TODO: RAG_AGENT_SUITE: list[EvalTask] | Dataset factory
+from agentrace.dataset.benchmarks._base import load_benchmark
+from agentrace.dataset.dataset import Dataset
+
+
+def load() -> Dataset:
+    return load_benchmark("rag_agent.json")

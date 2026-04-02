@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib
 from typing import Any
 
+from agentrace.dataset.benchmarks import load_suite as load_benchmark_suite
 from agentrace.capture.context_manager import trace
 from agentrace.classifier.models import FailureRecord, FailureType
 from agentrace.metrics.base import BaseMetric, MetricResult
@@ -35,11 +36,12 @@ from agentrace.capture.adapters import (
     traced_node,
 )
 
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 
 __all__ = [
     "trace",
     "evaluate",
+    "load_benchmark_suite",
     "AgentTrace",
     "Span",
     "SpanNode",

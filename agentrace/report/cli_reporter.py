@@ -36,6 +36,7 @@ class CLIReporter:
         prev_result: EvalResult | None = None,
         *,
         output_path: str | None = None,
+        html_path: str | None = None,
     ) -> None:
         """Render header, metric table, cost line, errors, and optional footer path."""
 
@@ -181,8 +182,10 @@ class CLIReporter:
                 self.console.print(line)
 
         if output_path:
-            foot = Text(
-                f"  Full results: {output_path}",
-                style=Style(dim=True, italic=True),
+            self.console.print(
+                Text(f"  JSON: {output_path}", style=Style(dim=True, italic=True))
             )
-            self.console.print(foot)
+        if html_path:
+            self.console.print(
+                Text(f"  HTML: {html_path}", style=Style(dim=True, italic=True))
+            )

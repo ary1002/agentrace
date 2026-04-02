@@ -25,6 +25,7 @@ class FailureClassifier:
         self._rule_classifier = RuleBasedClassifier()
         self._llm_classifier = LLMClassifier(judge) if judge and run_stage2 else None
         self.known_tools = known_tools
+        self.last_stage1_span_ids: set[str] = set()
 
     async def classify(
         self,
@@ -32,7 +33,9 @@ class FailureClassifier:
         task_id: str,
         wasted_step_ids: list[str] | None = None,
     ) -> list[FailureRecord]:
+        self.last_stage1_span_ids = set()
         stage1 = self._rule_classifier.classify(trace, task_id, self.known_tools)
+        self.last_stage1_span_ids = {r.span_id for r in stage1}
         if self._llm_classifier is None:
             return stage1
 

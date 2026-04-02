@@ -16,6 +16,17 @@ def _summarize(obj: Any, max_len: int) -> str:
     return s if len(s) <= max_len else s[: max_len - 3] + "..."
 
 
+def _tool_span_body(out: Any) -> str:
+    """Prefer structured tool span payloads (``result`` / ``output``) over ``str(dict)``."""
+    if isinstance(out, dict):
+        for key in ("result", "output", "content"):
+            v = out.get(key)
+            if isinstance(v, str) and v.strip():
+                return v
+        return str(out) if out else ""
+    return str(out) if out is not None else ""
+
+
 class AnswerFaithfulness(BaseMetric):
     name = "answer_faithfulness"
     default_threshold = 0.80
@@ -88,7 +99,8 @@ Respond ONLY with a JSON object:
         else:
             parts: list[str] = []
             for s in tool_spans:
-                parts.append(f"span {s.span_id}: {_summarize(s.output, 2000)}")
+                body = _tool_span_body(s.output)
+                parts.append(f"span {s.span_id}: {_summarize(body, 2000)}")
             formatted_tool_outputs = "\n".join(parts)
 
         prompt = self._build_prompt(trace, formatted_tool_outputs, final_answer)

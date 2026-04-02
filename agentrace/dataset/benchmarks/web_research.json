@@ -1,0 +1,685 @@
+[
+  {
+    "id": "web_001",
+    "query": "Which US state first ratified the Bill of Rights and on what date did it occur?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "easy",
+    "expected_answer": "New Jersey ratified on November 20, 1789."
+  },
+  {
+    "id": "web_002",
+    "query": "Who invented the World Wide Web and at which research organization was it proposed?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "easy",
+    "expected_answer": "Tim Berners-Lee at CERN."
+  },
+  {
+    "id": "web_003",
+    "query": "What is the chemical symbol for tungsten and which country is its name derived from?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_004",
+    "query": "Which river is the longest in South America and through how many countries does it primarily flow?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_005",
+    "query": "Who wrote 'Crime and Punishment' and in which city is the novel mainly set?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 2,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "easy",
+    "expected_answer": null
+  },
+  {
+    "id": "web_006",
+    "query": "What year did the Berlin Wall fall and who was the leader of the Soviet Union at that time?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_007",
+    "query": "Which element has atomic number 79 and what common jewelry metal is it?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "easy",
+    "expected_answer": "Gold (Au)."
+  },
+  {
+    "id": "web_008",
+    "query": "What is the speed of light in vacuum in m/s and which physicist first measured it accurately in the 17th century?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_009",
+    "query": "Which planet has the Great Red Spot and what type of storm is it?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "easy",
+    "expected_answer": null
+  },
+  {
+    "id": "web_010",
+    "query": "Who painted the ceiling of the Sistine Chapel and during which papacy was much of it completed?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 2,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_011",
+    "query": "What is the capital of Mongolia and what was its approximate population in 2020?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_012",
+    "query": "Which ocean is the Mariana Trench in and approximately how deep is Challenger Deep?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_013",
+    "query": "Who discovered penicillin and in what decade was it first used clinically?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_014",
+    "query": "What is the largest moon of Saturn and who first observed it with a telescope?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_015",
+    "query": "Which treaty ended World War I and in which palace was it signed?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 2,
+    "tags": [
+      "factual",
+      "multi-hop"
+    ],
+    "difficulty": "easy",
+    "expected_answer": null
+  },
+  {
+    "id": "web_016",
+    "query": "Do high-fat diets universally increase cardiovascular risk according to recent population studies, and where do guidelines disagree?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "contradictory"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_017",
+    "query": "Summarize whether coffee consumption is net harmful or beneficial for longevity, noting conflicting meta-analyses.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "contradictory"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_018",
+    "query": "Do economists agree on whether minimum wage hikes reduce employment? Cite opposing mainstream views.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "contradictory"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_019",
+    "query": "Is intermittent fasting superior to calorie restriction for weight loss? Compare contradictory trial conclusions.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 7,
+    "tags": [
+      "contradictory"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_020",
+    "query": "Does red wine consumption improve heart health, and how do cardiology societies differ on messaging?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "contradictory"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_021",
+    "query": "Are electric vehicles always lower-carbon than ICE vehicles on a lifecycle basis? Note contradictory assumptions.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "contradictory"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_022",
+    "query": "Is artificial general intelligence imminent: contrast optimistic vs skeptical expert timelines and reasoning.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "contradictory"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_023",
+    "query": "Does homework improve student outcomes? Summarize contradictory education research findings.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 7,
+    "tags": [
+      "contradictory"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_024",
+    "query": "Is nuclear power essential for decarbonization or too costly? Outline opposing policy analyses.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "contradictory"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_025",
+    "query": "Does stretching before exercise prevent injury? Reconcile contradictory sports-medicine recommendations.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "contradictory"
+    ],
+    "difficulty": "easy",
+    "expected_answer": null
+  },
+  {
+    "id": "web_026",
+    "query": "Locate the CDC page that defines 'close contact' for COVID-19 and cite the page title and publication date shown on that page.",
+    "expected_tools": [
+      "web_search",
+      "web_fetch"
+    ],
+    "optimal_steps": 7,
+    "tags": [
+      "citation"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_027",
+    "query": "Find the official SEC EDGAR glossary entry for '10-K' and quote how it defines the form.",
+    "expected_tools": [
+      "web_search",
+      "web_fetch"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "citation"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_028",
+    "query": "Retrieve the NASA mission page for Voyager 2 and cite the launch date as stated on that page.",
+    "expected_tools": [
+      "web_search",
+      "web_fetch"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "citation"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_029",
+    "query": "Find the W3C recommendation title for HTML5 and the URL path segment of the dated specification.",
+    "expected_tools": [
+      "web_search",
+      "web_fetch"
+    ],
+    "optimal_steps": 7,
+    "tags": [
+      "citation"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_030",
+    "query": "Locate the IETF RFC number and title for the TLS 1.3 specification from ietf.org.",
+    "expected_tools": [
+      "web_search",
+      "web_fetch"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "citation"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_031",
+    "query": "Find the EPA definition of 'hazardous waste' on epa.gov and cite the section heading used.",
+    "expected_tools": [
+      "web_search",
+      "web_fetch"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "citation"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_032",
+    "query": "Retrieve the BLS glossary definition of 'CPI-U' and quote the first sentence.",
+    "expected_tools": [
+      "web_search",
+      "web_fetch"
+    ],
+    "optimal_steps": 7,
+    "tags": [
+      "citation"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_033",
+    "query": "Find the ISO standard number and title for country codes (alpha-2) from iso.org summary.",
+    "expected_tools": [
+      "web_search",
+      "web_fetch"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "citation"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_034",
+    "query": "Locate the GitHub Docs page describing 'GitHub Actions' billing and cite the product name in the first heading.",
+    "expected_tools": [
+      "web_search",
+      "web_fetch"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "citation"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_035",
+    "query": "Find the UK Met Office definition of 'heatwave' and cite the criterion temperature threshold stated.",
+    "expected_tools": [
+      "web_search",
+      "web_fetch"
+    ],
+    "optimal_steps": 7,
+    "tags": [
+      "citation"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_036",
+    "query": "What is the most recent NASA Mars rover mission name as of 2025 and when did it land?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "temporal",
+      "factual"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_037",
+    "query": "What is the latest published stable major version of the Linux kernel as of early 2026?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "temporal",
+      "factual"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_038",
+    "query": "Who won the most recent men's FIFA World Cup before 2026 and in which host nation?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "temporal",
+      "factual"
+    ],
+    "difficulty": "easy",
+    "expected_answer": null
+  },
+  {
+    "id": "web_039",
+    "query": "What is the most recent amendment to the US Constitution by ratification year?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "temporal",
+      "factual"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_040",
+    "query": "As of 2025, what is the latest iPhone generation Apple markets on its primary product page?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 3,
+    "tags": [
+      "temporal",
+      "factual"
+    ],
+    "difficulty": "easy",
+    "expected_answer": null
+  },
+  {
+    "id": "web_041",
+    "query": "What is the most recent Nobel Prize in Physics winner team announcement year you can verify?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "temporal",
+      "factual"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_042",
+    "query": "What is the latest long-term global surface temperature trend reported by IPCC AR6 synthesis timing?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "temporal",
+      "factual"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_043",
+    "query": "Which COVID-19 vaccine was most recently approved by the FDA for pediatric use as of 2025?",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "temporal",
+      "factual"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_044",
+    "query": "Compare PostgreSQL and MySQL for OLTP workloads: locking models, replication, and JSON support.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "comparative"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_045",
+    "query": "Compare mitosis vs meiosis: number of divisions, ploidy outcomes, and where each occurs.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "comparative"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_046",
+    "query": "Compare REST vs GraphQL for mobile clients: over-fetching, caching, and error handling.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "comparative"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_047",
+    "query": "Compare Keynesian vs monetarist explanations of inflation in the 1970s US.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "comparative"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  },
+  {
+    "id": "web_048",
+    "query": "Compare B-tree vs LSM-tree storage engines for write-heavy workloads.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 4,
+    "tags": [
+      "comparative"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_049",
+    "query": "Compare civil law vs common law systems: role of precedent and codification.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 5,
+    "tags": [
+      "comparative"
+    ],
+    "difficulty": "medium",
+    "expected_answer": null
+  },
+  {
+    "id": "web_050",
+    "query": "Compare transformer vs RNN sequence models: parallelism and long-range dependency handling.",
+    "expected_tools": [
+      "web_search"
+    ],
+    "optimal_steps": 6,
+    "tags": [
+      "comparative"
+    ],
+    "difficulty": "hard",
+    "expected_answer": null
+  }
+]
