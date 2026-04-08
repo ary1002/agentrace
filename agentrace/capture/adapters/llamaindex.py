@@ -1,16 +1,46 @@
-"""LlamaIndex: rely on native OpenTelemetry when a global TracerProvider is set."""
+"""LlamaIndex integration helpers for binding AgentTrace session providers."""
+
+from __future__ import annotations
+
+from opentelemetry.sdk.trace import TracerProvider
 
 
-def setup_llamaindex() -> None:
-    """
-    LlamaIndex has native OTel instrumentation via llama_index.core.instrumentation.
-    When agentrace.trace() sets the global TracerProvider, LlamaIndex will
-    automatically attach its spans to the same provider and they will appear
-    in the AgentTrace.
+def _try_set_global_handler(handler, **kwargs) -> bool:
+    try:
+        handler(**kwargs)
+        return True
+    except TypeError:
+        return False
+    except Exception:
+        return False
 
-    This function is a no-op — it exists only for documentation and to provide
-    a consistent import surface. Call it if you want to be explicit:
-        from agentrace.capture.adapters.llamaindex import setup_llamaindex
-        setup_llamaindex()
-    """
-    pass  # intentional — LlamaIndex auto-detects the OTel provider
+
+def setup_llamaindex(provider: TracerProvider | None = None) -> None:
+    """Best-effort LlamaIndex OTel handler setup for the active provider."""
+    if provider is None:
+        return
+    try:
+        from llama_index.core.instrumentation import set_global_handler
+    except ImportError:
+        return
+
+    # LlamaIndex handler signatures vary by release; probe common forms.
+    attempts = [
+        {"handler": "opentelemetry", "tracer_provider": provider},
+        {"handler": "opentelemetry", "provider": provider},
+        {"handler": "opentelemetry", "trace_provider": provider},
+    ]
+    for kwargs in attempts:
+        if _try_set_global_handler(set_global_handler, **kwargs):
+            return
+
+
+def reset_llamaindex() -> None:
+    """Best-effort reset for LlamaIndex global instrumentation handler."""
+    try:
+        from llama_index.core.instrumentation import set_global_handler
+    except ImportError:
+        return
+    for kwargs in ({"handler": None}, {}):
+        if _try_set_global_handler(set_global_handler, **kwargs):
+            return

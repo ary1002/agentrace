@@ -1,12 +1,17 @@
-{# Jinja2 template for self-contained HTML eval report (Chart.js hooks). #}
-{# TODO: layout sections — summary, metric cards, failure breakdown, trace links #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>AgentRace Report</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{{ page_title }} - AgentTrace</title>
+    <style>{{ css | safe }}</style>
+    {{ chart_tag | safe }}
 </head>
 <body>
-    <p>TODO: render EvalResult</p>
+    <div class="wrap">
+    {% for section in sections %}
+      {{ section | safe }}
+    {% endfor %}
+    </div>
 </body>
 </html>

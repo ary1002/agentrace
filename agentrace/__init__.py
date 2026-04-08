@@ -7,6 +7,8 @@ from typing import Any
 
 from agentrace.dataset.benchmarks import load_suite as load_benchmark_suite
 from agentrace.capture.context_manager import trace
+from agentrace.capture.decorator import agent
+from agentrace.capture.span import span
 from agentrace.classifier.models import FailureRecord, FailureType
 from agentrace.metrics.base import BaseMetric, MetricResult
 from agentrace.normalizer.models import AgentTrace, Span, SpanNode, TokenCount
@@ -40,6 +42,8 @@ __version__ = "1.0.0"
 
 __all__ = [
     "trace",
+    "agent",
+    "span",
     "evaluate",
     "load_benchmark_suite",
     "AgentTrace",

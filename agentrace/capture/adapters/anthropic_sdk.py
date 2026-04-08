@@ -70,7 +70,24 @@ def patch_anthropic() -> None:
                     int(completion_tokens),
                     cost,
                 )
-                # tool_call spans belong around real tool execution, not around the LLM response.
+                for tool_call in output_dict.get("tool_calls", []):
+                    name = str(tool_call.get("tool_name") or "unknown")
+                    with tracer.start_as_current_span(f"tool/{name}") as tspan:
+                        set_span_attributes(
+                            tspan,
+                            "tool_call",
+                            {
+                                "tool_name": name,
+                                "tool_use_id": tool_call.get("tool_use_id"),
+                                "input": tool_call.get("input", {}),
+                            },
+                            {
+                                "tool_use_id": tool_call.get("tool_use_id"),
+                                "status": "requested",
+                                "result": "tool invocation requested by model",
+                            },
+                            "anthropic",
+                        )
                 return response
             except Exception as e:
                 record_exception(span, e)
@@ -103,6 +120,24 @@ def patch_anthropic() -> None:
                     int(completion_tokens),
                     cost,
                 )
+                for tool_call in output_dict.get("tool_calls", []):
+                    name = str(tool_call.get("tool_name") or "unknown")
+                    with tracer.start_as_current_span(f"tool/{name}") as tspan:
+                        set_span_attributes(
+                            tspan,
+                            "tool_call",
+                            {
+                                "tool_name": name,
+                                "tool_use_id": tool_call.get("tool_use_id"),
+                                "input": tool_call.get("input", {}),
+                            },
+                            {
+                                "tool_use_id": tool_call.get("tool_use_id"),
+                                "status": "requested",
+                                "result": "tool invocation requested by model",
+                            },
+                            "anthropic",
+                        )
                 return response
             except Exception as e:
                 record_exception(span, e)

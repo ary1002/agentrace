@@ -14,6 +14,7 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 from opentelemetry.trace import Tracer as OtelTracer
 
 from agentrace.normalizer.normalizer import Normalizer
+from agentrace.capture.adapters.llamaindex import reset_llamaindex, setup_llamaindex
 
 if TYPE_CHECKING:
     from agentrace.normalizer.models import AgentTrace
@@ -77,6 +78,7 @@ class _TraceAsyncContextManager(AbstractAsyncContextManager[TraceContext]):
         processor = SimpleSpanProcessor(self._exporter)
         self._provider = TracerProvider()
         self._provider.add_span_processor(processor)
+        setup_llamaindex(self._provider)
         tracer = self._provider.get_tracer("agentrace")
         self._tracer_token = _active_tracer.set(tracer)
         self._span_cm = tracer.start_as_current_span(
@@ -107,6 +109,7 @@ class _TraceAsyncContextManager(AbstractAsyncContextManager[TraceContext]):
         finally:
             if self._tracer_token is not None:
                 _active_tracer.reset(self._tracer_token)
+            reset_llamaindex()
             if self._provider is not None:
                 self._provider.shutdown()
         return None

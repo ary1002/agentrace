@@ -129,6 +129,15 @@ async def evaluate(
                     for metric in resolved_metrics:
                         r = await metric.compute(agent_trace, task, judge=judge)
                         metric_results[metric.name] = r
+                    pass_flags = [r.passed for r in metric_results.values()]
+                    if pass_flags and all(pass_flags):
+                        agent_trace.outcome = "success"
+                    elif pass_flags and any(pass_flags):
+                        agent_trace.outcome = "partial"
+                    elif pass_flags:
+                        agent_trace.outcome = "failure"
+                    else:
+                        agent_trace.outcome = "success"
 
                     wasted: list[str] = []
                     for r in metric_results.values():

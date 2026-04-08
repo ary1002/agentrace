@@ -113,8 +113,24 @@ class Normalizer:
 
         attrs = raw.attributes
         span_type = cls._parse_span_type(attrs)
-        input_obj = cls._load_json_attr(attrs, "agentrace.input")
-        output_obj = cls._load_json_attr(attrs, "agentrace.output")
+        input_obj = cls._load_json_attr(
+            attrs,
+            "agentrace.input",
+            fallback_keys=(
+                "openinference.input",
+                "openinference.input.value",
+                "openinference.input.message",
+            ),
+        )
+        output_obj = cls._load_json_attr(
+            attrs,
+            "agentrace.output",
+            fallback_keys=(
+                "openinference.output",
+                "openinference.output.value",
+                "openinference.output.message",
+            ),
+        )
 
         start_time = raw.start_time
         if start_time is None:
@@ -125,14 +141,40 @@ class Normalizer:
         else:
             latency_ms = (end_time - start_time) / 1e6
 
-        prompt_tok = cls._int_attr(attrs, "agentrace.token_count.prompt")
-        completion_tok = cls._int_attr(attrs, "agentrace.token_count.completion")
+        prompt_tok = cls._int_attr(
+            attrs,
+            "agentrace.token_count.prompt",
+            fallback_keys=(
+                "openinference.token_count.prompt",
+                "openinference.prompt_tokens",
+            ),
+        )
+        completion_tok = cls._int_attr(
+            attrs,
+            "agentrace.token_count.completion",
+            fallback_keys=(
+                "openinference.token_count.completion",
+                "openinference.completion_tokens",
+            ),
+        )
         token_count = TokenCount(prompt=prompt_tok, completion=completion_tok)
 
-        cost_usd = cls._float_attr(attrs, "agentrace.cost_usd", 0.0)
+        cost_usd = cls._float_attr(
+            attrs,
+            "agentrace.cost_usd",
+            0.0,
+            fallback_keys=("openinference.cost", "openinference.cost_usd"),
+        )
         ts = datetime.fromtimestamp(start_time / 1e9, tz=timezone.utc)
-        framework = str(cls._attr_get(attrs, "agentrace.framework", "unknown") or "unknown")
-        err_raw = cls._attr_get(attrs, "agentrace.error")
+        framework = str(
+            cls._attr_get(
+                attrs,
+                "agentrace.framework",
+                cls._attr_get(attrs, "openinference.framework", "unknown"),
+            )
+            or "unknown"
+        )
+        err_raw = cls._attr_get(attrs, "agentrace.error", cls._attr_get(attrs, "openinference.error"))
         error: str | None = None if err_raw is None else str(err_raw)
 
         return Span(
@@ -155,8 +197,22 @@ class Normalizer:
     ) -> Literal["llm_call", "tool_call", "memory_read", "memory_write", "agent_step"]:
         raw = cls._attr_get(attributes, "agentrace.span_type")
         if raw is None:
+            raw = cls._attr_get(
+                attributes,
+                "openinference.span.kind",
+                cls._attr_get(attributes, "openinference.span_type"),
+            )
+        if raw is None:
             return "agent_step"
-        s = str(raw)
+        s = str(raw).lower()
+        if s in ("llm", "llm_call"):
+            return "llm_call"
+        if s in ("tool", "tool_call"):
+            return "tool_call"
+        if s in ("retriever", "memory_read"):
+            return "memory_read"
+        if s in ("memory_write",):
+            return "memory_write"
         if s in _SPAN_TYPES:
             return cast(
                 Literal["llm_call", "tool_call", "memory_read", "memory_write", "agent_step"],
@@ -165,25 +221,44 @@ class Normalizer:
         return "agent_step"
 
     @classmethod
-    def _load_json_attr(cls, attributes: object, key: str) -> dict:
-        raw = cls._attr_get(attributes, key, "{}")
+    def _load_json_attr(
+        cls,
+        attributes: object,
+        key: str,
+        fallback_keys: tuple[str, ...] = (),
+    ) -> dict:
+        raw = cls._attr_get(attributes, key)
+        if raw is None:
+            for fb in fallback_keys:
+                raw = cls._attr_get(attributes, fb)
+                if raw is not None:
+                    break
         if raw is None:
             raw = "{}"
         if isinstance(raw, dict):
             return raw
+        if isinstance(raw, (int, float, bool)):
+            return {"value": raw}
         if not isinstance(raw, str):
             raise MalformedTraceError(f"{key!r} must be a JSON object string or dict, got {type(raw)}")
         try:
             obj = json.loads(raw)
         except json.JSONDecodeError as exc:
-            raise MalformedTraceError(f"invalid JSON for {key!r}") from exc
+            return {"value": raw}
         if not isinstance(obj, dict):
-            raise MalformedTraceError(f"JSON for {key!r} must decode to an object")
+            return {"value": obj}
         return obj
 
     @classmethod
-    def _int_attr(cls, attributes: object, key: str) -> int:
-        raw = cls._attr_get(attributes, key, 0)
+    def _int_attr(cls, attributes: object, key: str, fallback_keys: tuple[str, ...] = ()) -> int:
+        raw = cls._attr_get(attributes, key)
+        if raw is None:
+            for fb in fallback_keys:
+                raw = cls._attr_get(attributes, fb)
+                if raw is not None:
+                    break
+        if raw is None:
+            raw = 0
         if raw is None:
             return 0
         if isinstance(raw, bool):
@@ -200,8 +275,21 @@ class Normalizer:
         return 0
 
     @classmethod
-    def _float_attr(cls, attributes: object, key: str, default: float) -> float:
-        raw = cls._attr_get(attributes, key, default)
+    def _float_attr(
+        cls,
+        attributes: object,
+        key: str,
+        default: float,
+        fallback_keys: tuple[str, ...] = (),
+    ) -> float:
+        raw = cls._attr_get(attributes, key)
+        if raw is None:
+            for fb in fallback_keys:
+                raw = cls._attr_get(attributes, fb)
+                if raw is not None:
+                    break
+        if raw is None:
+            raw = default
         if raw is None:
             return default
         if isinstance(raw, float):
