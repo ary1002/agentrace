@@ -53,8 +53,10 @@ class RuleBasedClassifier:
 
         add(self._check_hallucinated_tool(trace, task_id, known_tools))
         add(self._check_redundant_loop(trace, task_id))
-        add(self._check_premature_termination(trace, task_id))
+        # Context overflow before premature termination: both can match the same span's error;
+        # we keep the more specific CONTEXT_OVERFLOW classification.
         add(self._check_context_overflow(trace, task_id))
+        add(self._check_premature_termination(trace, task_id))
         return records
 
     def _check_hallucinated_tool(
