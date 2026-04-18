@@ -39,7 +39,7 @@ class PostgreSQLStorage(BaseStorage):
 
     async def connect(self) -> None:
         try:
-            import asyncpg  # type: ignore[import-untyped]
+            import asyncpg  # type: ignore[import-untyped, import-not-found]
         except ImportError as e:
             raise ImportError(
                 "asyncpg is required. pip install agentrace[postgres]"
