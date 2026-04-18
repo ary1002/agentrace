@@ -70,8 +70,8 @@ def run(
         runner_cfg = ec.runner
         concurrency = int(runner_cfg.get("concurrency", 1))
         output_dir = runner_cfg.get("output_dir", "./eval_results/")
-        timeout_per_task = runner_cfg.get("timeout_per_task")
-        _ = timeout_per_task
+        raw_timeout = runner_cfg.get("timeout_per_task")
+        timeout_per_task = float(raw_timeout) if raw_timeout is not None else None
         checkpoint_dir_raw = runner_cfg.get("checkpoint_dir")
         checkpoint_dir = str(checkpoint_dir_raw) if checkpoint_dir_raw else None
 
@@ -115,6 +115,7 @@ def run(
                 thresholds={str(k): float(v) for k, v in thresholds.items()},
                 storage_config=storage_config,
                 run_id=run_id,
+                timeout_per_task=timeout_per_task,
             )
         )
 

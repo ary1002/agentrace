@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import asyncio
+
 import pytest
 
 from agentrace.dataset.dataset import Dataset
@@ -29,3 +31,27 @@ async def test_evaluate_smoke_with_mock_agent(tmp_path) -> None:
     )
     assert len(out.task_results) == 2
     assert "latency_p50" in out.aggregate_scores
+
+
+@pytest.mark.asyncio
+async def test_evaluate_timeout_per_task(tmp_path) -> None:
+    async def slow_agent(query: str) -> str:
+        await asyncio.sleep(60.0)
+        return "never"
+
+    dataset = Dataset(
+        [EvalTask(id="task-slow", query="hello", expected_tools=None)],
+    )
+    out = await evaluate(
+        agent=slow_agent,
+        dataset=dataset,
+        metrics=["latency_p50"],
+        concurrency=1,
+        output_dir=str(tmp_path / "reports"),
+        storage_config={"backend": "sqlite", "path": str(tmp_path / "agentrace.db")},
+        run_id="timeout_run",
+        timeout_per_task=0.2,
+    )
+    assert len(out.task_results) == 1
+    err = out.task_results[0].error or ""
+    assert "timeout_per_task" in err

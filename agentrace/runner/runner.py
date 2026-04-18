@@ -35,8 +35,13 @@ async def evaluate(
     thresholds: dict[str, float] | None = None,
     storage_config: dict | None = None,
     run_id: str | None = None,
+    timeout_per_task: float | None = None,
 ) -> EvalResult:
-    """Run each task with ``agentrace.trace``, score with named metrics, aggregate results."""
+    """Run each task with ``agentrace.trace``, score with named metrics, aggregate results.
+
+    If ``timeout_per_task`` is set (seconds), each ``await agent(query)`` is bounded by
+    :func:`asyncio.wait_for`; on expiry the task is recorded as failed with a clear error.
+    """
 
     if run_id is not None:
         resolved_run_id = run_id
@@ -120,7 +125,18 @@ async def evaluate(
             async with semaphore:
                 try:
                     async with agentrace.trace(session_id=task.id, task=task.query) as t:
-                        await agent(task.query)
+                        try:
+                            if timeout_per_task is not None:
+                                await asyncio.wait_for(
+                                    agent(task.query),
+                                    timeout=float(timeout_per_task),
+                                )
+                            else:
+                                await agent(task.query)
+                        except asyncio.TimeoutError:
+                            raise RuntimeError(
+                                f"Agent exceeded timeout_per_task ({float(timeout_per_task)}s)"
+                            ) from None
 
                     agent_trace = t.agent_trace
                     if agent_trace is None:
