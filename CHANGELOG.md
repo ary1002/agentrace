@@ -13,4 +13,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Packaging extras: `agentrace[judge]`, `agentrace[postgres]`, `agentrace[all]`.
 - PEP 561 support via `py.typed`.
 - Project documentation: README, CONTRIBUTING, SECURITY, and this changelog.
-

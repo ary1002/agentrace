@@ -31,7 +31,13 @@ class _LatencyPercentileBase(BaseMetric):
                 evidence=["no_span_latencies"],
             )
 
-        k = max(0, min(len(latencies) - 1, int(round((self.percentile / 100.0) * (len(latencies) - 1)))))
+        k = max(
+            0,
+            min(
+                len(latencies) - 1,
+                int(round((self.percentile / 100.0) * (len(latencies) - 1))),
+            ),
+        )
         p_ms = float(latencies[k])
         score = min(1.0, self.reference_ms / max(p_ms, 1.0))
         reason = f"p{self.percentile}={p_ms:.1f}ms vs ref={self.reference_ms:.0f}ms -> score={score:.3f}"

@@ -39,7 +39,10 @@ class CheckpointManager:
             await self.storage.save_task_result(self.run_id, result)
             self._completed.add(result.task_id)
         except Exception as e:  # noqa: BLE001
-            warnings.warn(f"Checkpoint save failed for task {result.task_id}: {e}")
+            warnings.warn(
+                f"Checkpoint save failed for task {result.task_id}: {e}",
+                stacklevel=2,
+            )
 
     @property
     def completed_count(self) -> int:

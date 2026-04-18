@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from agentrace.metrics.base import BaseMetric, MetricResult
 
@@ -34,7 +34,11 @@ class ReasoningCoherence(BaseMetric):
         lines: list[str] = []
         for span in ordered:
             inp = _summarize(span.input, 500)
-            raw_out = _span_output_for_prompt(span.output) if span.span_type == "tool_call" else span.output
+            raw_out = (
+                _span_output_for_prompt(span.output)
+                if span.span_type == "tool_call"
+                else span.output
+            )
             out = _summarize(raw_out, 500)
             lines.append(
                 f"- [{span.span_type}] input_summary={inp!r} output_summary={out!r}"
@@ -85,8 +89,8 @@ Respond ONLY with a JSON object:
     async def compute(
         self,
         trace: Any,
-        expected: Optional[Any] = None,
-        judge: Optional[JudgeClient] = None,
+        expected: Any | None = None,
+        judge: JudgeClient | None = None,
     ) -> MetricResult:
         if judge is None:
             raise ValueError("ReasoningCoherence requires a JudgeClient")

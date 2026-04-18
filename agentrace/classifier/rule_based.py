@@ -77,7 +77,11 @@ class RuleBasedClassifier:
                 tool_name = "" if raw is None else str(raw)
                 err_l = (span.error or "").lower()
                 hallucinated = False
-                if known_tools is not None and tool_name and tool_name not in known_tools:
+                if (
+                    known_tools is not None
+                    and tool_name
+                    and tool_name not in known_tools
+                ):
                     hallucinated = True
                 if not hallucinated:
                     for m in _ERROR_HALLUCINATION_MARKERS:
@@ -105,10 +109,16 @@ class RuleBasedClassifier:
             _LOG.warning("_check_hallucinated_tool failed: %s", e)
             return []
 
-    def _check_redundant_loop(self, trace: AgentTrace, task_id: str) -> list[FailureRecord]:
+    def _check_redundant_loop(
+        self, trace: AgentTrace, task_id: str
+    ) -> list[FailureRecord]:
         try:
             out: list[FailureRecord] = []
-            tool_spans = [s for s in sorted(trace.spans, key=lambda s: s.timestamp) if s.span_type == "tool_call"]
+            tool_spans = [
+                s
+                for s in sorted(trace.spans, key=lambda s: s.timestamp)
+                if s.span_type == "tool_call"
+            ]
             for i in range(1, len(tool_spans)):
                 prev, cur = tool_spans[i - 1], tool_spans[i]
                 raw_p = prev.input.get("tool_name") or prev.input.get("name")
@@ -117,7 +127,9 @@ class RuleBasedClassifier:
                 name_c = "" if raw_c is None else str(raw_c)
                 if name_p != name_c or not name_p:
                     continue
-                ratio = difflib.SequenceMatcher(None, str(prev.input), str(cur.input)).ratio()
+                ratio = difflib.SequenceMatcher(
+                    None, str(prev.input), str(cur.input)
+                ).ratio()
                 if ratio > 0.85:
                     out.append(
                         FailureRecord(
@@ -140,7 +152,9 @@ class RuleBasedClassifier:
             _LOG.warning("_check_redundant_loop failed: %s", e)
             return []
 
-    def _check_premature_termination(self, trace: AgentTrace, task_id: str) -> list[FailureRecord]:
+    def _check_premature_termination(
+        self, trace: AgentTrace, task_id: str
+    ) -> list[FailureRecord]:
         try:
             ordered = sorted(trace.spans, key=lambda s: s.timestamp)
             if not ordered:
@@ -158,12 +172,12 @@ class RuleBasedClassifier:
                     content = str(llm_spans[-1].output).lower()
                     for phrase in _PREMATURE_PHRASES:
                         if phrase in content:
-                            detected_reason = (
-                                f"last llm output suggests inability: matched {phrase!r}"
-                            )
+                            detected_reason = f"last llm output suggests inability: matched {phrase!r}"
                             break
             if not detected_reason and len(trace.spans) < 2:
-                detected_reason = f"only {len(trace.spans)} span(s); agent did almost nothing"
+                detected_reason = (
+                    f"only {len(trace.spans)} span(s); agent did almost nothing"
+                )
 
             if not detected_reason:
                 return []
@@ -187,7 +201,9 @@ class RuleBasedClassifier:
             _LOG.warning("_check_premature_termination failed: %s", e)
             return []
 
-    def _check_context_overflow(self, trace: AgentTrace, task_id: str) -> list[FailureRecord]:
+    def _check_context_overflow(
+        self, trace: AgentTrace, task_id: str
+    ) -> list[FailureRecord]:
         try:
             out: list[FailureRecord] = []
             ordered = sorted(trace.spans, key=lambda s: s.timestamp)

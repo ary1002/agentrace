@@ -24,9 +24,14 @@ class StorageSerializer:
         if result.trace is not None:
             try:
                 trace_dict = dataclasses.asdict(result.trace)
-                trace_json = json.dumps(trace_dict, default=StorageSerializer._json_default)
+                trace_json = json.dumps(
+                    trace_dict, default=StorageSerializer._json_default
+                )
             except Exception as e:  # noqa: BLE001 — must not block checkpoint
-                warnings.warn(f"Trace serialization failed for task {result.task_id}: {e}")
+                warnings.warn(
+                    f"Trace serialization failed for task {result.task_id}: {e}",
+                    stacklevel=2,
+                )
                 trace_json = None
 
         return {

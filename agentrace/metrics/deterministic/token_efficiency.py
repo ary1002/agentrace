@@ -38,7 +38,9 @@ class TokenEfficiency(BaseMetric):
             )
 
         if expected is not None and expected.optimal_steps is not None:
-            budget = max(200, int(expected.optimal_steps) * self._TOKENS_PER_OPTIMAL_STEP)
+            budget = max(
+                200, int(expected.optimal_steps) * self._TOKENS_PER_OPTIMAL_STEP
+            )
         else:
             budget = 2000
 

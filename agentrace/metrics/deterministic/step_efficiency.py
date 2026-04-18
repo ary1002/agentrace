@@ -52,7 +52,10 @@ class StepEfficiency(BaseMetric):
             "memory_write": "memory_writes",
             "agent_step": "agent_steps",
         }
-        type_parts = [f"{label.get(stype, stype)}={counts[stype]}" for stype in sorted(counts.keys())]
+        type_parts = [
+            f"{label.get(stype, stype)}={counts[stype]}"
+            for stype in sorted(counts.keys())
+        ]
         evidence = [
             f"actual_steps={actual_steps}, optimal_steps={optimal}, wasted={wasted_steps}",
             ", ".join(type_parts) if type_parts else "no spans by type",
@@ -63,9 +66,7 @@ class StepEfficiency(BaseMetric):
         elif score >= thr:
             reason = f"Agent used {actual_steps} steps vs optimal {optimal} ({wasted_steps} wasted)"
         else:
-            reason = (
-                f"Agent was significantly inefficient: {actual_steps} steps vs optimal {optimal}"
-            )
+            reason = f"Agent was significantly inefficient: {actual_steps} steps vs optimal {optimal}"
 
         passed = score >= thr
 

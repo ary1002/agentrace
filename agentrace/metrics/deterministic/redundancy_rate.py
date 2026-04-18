@@ -24,7 +24,11 @@ class RedundancyRate(BaseMetric):
         judge: Any | None = None,
     ) -> MetricResult:
         thr = self._effective_threshold()
-        tool_spans = [s for s in sorted(trace.spans, key=lambda s: s.timestamp) if s.span_type == "tool_call"]
+        tool_spans = [
+            s
+            for s in sorted(trace.spans, key=lambda s: s.timestamp)
+            if s.span_type == "tool_call"
+        ]
         if len(tool_spans) < 2:
             return MetricResult(
                 metric_name=self.name,
@@ -43,7 +47,9 @@ class RedundancyRate(BaseMetric):
             name_c = "" if raw_c is None else str(raw_c)
             if name_p != name_c or not name_p:
                 continue
-            ratio = difflib.SequenceMatcher(None, str(prev.input), str(cur.input)).ratio()
+            ratio = difflib.SequenceMatcher(
+                None, str(prev.input), str(cur.input)
+            ).ratio()
             if ratio > 0.85:
                 redundant_pairs.append((prev.span_id, cur.span_id))
 
@@ -52,7 +58,10 @@ class RedundancyRate(BaseMetric):
         redundancy_fraction = len(redundant_pairs) / max_pairs
         score = max(0.0, min(1.0, 1.0 - redundancy_fraction))
 
-        evidence = [f"redundant_pair_{i}: {a} -> {b}" for i, (a, b) in enumerate(redundant_pairs)]
+        evidence = [
+            f"redundant_pair_{i}: {a} -> {b}"
+            for i, (a, b) in enumerate(redundant_pairs)
+        ]
         if not evidence:
             evidence = ["no_near_duplicate_tool_calls"]
 

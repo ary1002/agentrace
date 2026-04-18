@@ -75,11 +75,17 @@ class ToolSelectionAccuracy(BaseMetric):
             status = "matched" if matched else "unexpected"
             evidence.append(f"span {span.span_id}: called '{tool_name}' — {status}")
 
-        unexpected_names = [tool_name for (_, tool_name), m in zip(actual_calls, matched_flags, strict=True) if not m]
+        unexpected_names = [
+            tool_name
+            for (_, tool_name), m in zip(actual_calls, matched_flags, strict=True)
+            if not m
+        ]
         if matched_count == len(actual_calls):
             unexpected_part = ""
         else:
-            unexpected_part = f" Unexpected: [{', '.join(repr(n) for n in unexpected_names)}]"
+            unexpected_part = (
+                f" Unexpected: [{', '.join(repr(n) for n in unexpected_names)}]"
+            )
 
         reason = (
             f"{matched_count}/{len(actual_calls)} tool calls matched expected tools "

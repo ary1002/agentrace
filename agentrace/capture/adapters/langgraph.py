@@ -8,7 +8,11 @@ import logging
 from collections.abc import Callable
 from typing import TypeVar
 
-from agentrace.capture.adapters._span_utils import get_tracer, record_exception, set_span_attributes
+from agentrace.capture.adapters._span_utils import (
+    get_tracer,
+    record_exception,
+    set_span_attributes,
+)
 
 _LOG = logging.getLogger(__name__)
 
@@ -44,7 +48,9 @@ def traced_node(name: str | None = None):
                     "node": node_name,
                     "node_name": node_name,
                     "state_keys": (
-                        list(state.keys()) if isinstance(state, dict) else str(type(state))
+                        list(state.keys())
+                        if isinstance(state, dict)
+                        else str(type(state))
                     ),
                 }
 

@@ -4,7 +4,11 @@ from __future__ import annotations
 
 from agentrace.metrics.base import BaseMetric
 from agentrace.metrics.llm_judge.answer_faithfulness import AnswerFaithfulness
-from agentrace.metrics.llm_judge.judge_client import JudgeClient, JudgeError, JudgeParseError
+from agentrace.metrics.llm_judge.judge_client import (
+    JudgeClient,
+    JudgeError,
+    JudgeParseError,
+)
 from agentrace.metrics.llm_judge.plan_quality import PlanQuality
 from agentrace.metrics.llm_judge.reasoning_coherence import ReasoningCoherence
 from agentrace.metrics.llm_judge.self_correction import SelfCorrectionQuality

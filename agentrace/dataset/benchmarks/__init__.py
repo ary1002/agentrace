@@ -23,8 +23,7 @@ def load_suite(name: str) -> Dataset:
         return rag_agent.load()
     available = "\n  ".join(AVAILABLE_SUITES.values())
     raise ValueError(
-        f"Unknown benchmark suite: '{name}'.\n"
-        f"Available suites:\n  {available}"
+        f"Unknown benchmark suite: '{name}'.\nAvailable suites:\n  {available}"
     )
 
 

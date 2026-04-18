@@ -11,7 +11,9 @@ from rich.text import Text
 def diff(
     run_a: str = typer.Argument(..., help="Path to first run JSON file"),
     run_b: str = typer.Argument(..., help="Path to second run JSON file"),
-    html: bool = typer.Option(False, "--html", help="Also generate HTML comparison report"),
+    html: bool = typer.Option(
+        False, "--html", help="Also generate HTML comparison report"
+    ),
     output_dir: str = typer.Option("./eval_results/", "--output-dir"),
 ) -> None:
     """Compare two AgentTrace runs and print a diff table to the terminal."""

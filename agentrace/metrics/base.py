@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any, ClassVar, Optional
+from typing import Any, ClassVar
 
 
 @dataclass
@@ -26,13 +26,17 @@ class BaseMetric(ABC):
 
     name: ClassVar[str]
     default_threshold: ClassVar[float]
+    _run_threshold: float
+
+    def __init__(self) -> None:
+        self._run_threshold = float(type(self).default_threshold)
 
     @abstractmethod
     async def compute(
         self,
         trace: Any,
-        expected: Optional[Any] = None,
-        judge: Optional[Any] = None,
+        expected: Any | None = None,
+        judge: Any | None = None,
     ) -> MetricResult:
         """Score ``trace``; ``expected`` is typically an ``EvalTask`` when available."""
 

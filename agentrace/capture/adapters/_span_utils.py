@@ -7,7 +7,6 @@ import json
 import opentelemetry.trace as otel_trace
 from opentelemetry.trace import Span, Status, StatusCode, Tracer
 
-
 _MAX_ATTR_LEN = 32_000
 _TRUNC_SUFFIX = "...[truncated]"
 

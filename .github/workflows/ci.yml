@@ -27,9 +27,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[dev,all]"
+          pip install pre-commit
+
+      - name: Pre-commit (ruff, mypy, file checks)
+        run: pre-commit run --all-files
 
       - name: Pytest
         run: pytest
-
-      - name: Mypy
-        run: mypy agentrace cli

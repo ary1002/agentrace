@@ -6,15 +6,15 @@ import json
 from contextlib import AbstractAsyncContextManager
 from contextvars import ContextVar, Token
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 from opentelemetry.trace import Tracer as OtelTracer
 
-from agentrace.normalizer.normalizer import Normalizer
 from agentrace.capture.adapters.llamaindex import reset_llamaindex, setup_llamaindex
+from agentrace.normalizer.normalizer import Normalizer
 
 if TYPE_CHECKING:
     from agentrace.normalizer.models import AgentTrace
@@ -43,7 +43,9 @@ def current_tracer() -> OtelTracer:
     """
     t = _active_tracer.get()
     if t is None:
-        raise RuntimeError("current_tracer() called outside an active agentrace.trace() context")
+        raise RuntimeError(
+            "current_tracer() called outside an active agentrace.trace() context"
+        )
     return t
 
 
@@ -53,7 +55,7 @@ class TraceContext:
 
     session_id: str
     task: str
-    agent_trace: Optional["AgentTrace"] = None
+    agent_trace: AgentTrace | None = None
 
 
 class _TraceAsyncContextManager(AbstractAsyncContextManager[TraceContext]):
@@ -105,7 +107,9 @@ class _TraceAsyncContextManager(AbstractAsyncContextManager[TraceContext]):
                 self._span_cm.__exit__(exc_type, exc, tb)
             if self._exporter is not None:
                 finished = list(self._exporter.get_finished_spans())
-                self._ctx.agent_trace = Normalizer.build(self._session_id, self._task, finished)
+                self._ctx.agent_trace = Normalizer.build(
+                    self._session_id, self._task, finished
+                )
         finally:
             if self._tracer_token is not None:
                 _active_tracer.reset(self._tracer_token)

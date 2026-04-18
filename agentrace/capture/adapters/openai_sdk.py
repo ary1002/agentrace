@@ -37,7 +37,9 @@ def patch_openai() -> None:
                 usage = getattr(response, "usage", None)
                 prompt_tokens = usage.prompt_tokens if usage else 0
                 completion_tokens = usage.completion_tokens if usage else 0
-                cost = compute_cost(str(model), int(prompt_tokens), int(completion_tokens))
+                cost = compute_cost(
+                    str(model), int(prompt_tokens), int(completion_tokens)
+                )
 
                 output_dict = {
                     "content": (
@@ -92,7 +94,9 @@ def patch_openai() -> None:
                 usage = getattr(response, "usage", None)
                 prompt_tokens = usage.prompt_tokens if usage else 0
                 completion_tokens = usage.completion_tokens if usage else 0
-                cost = compute_cost(str(model), int(prompt_tokens), int(completion_tokens))
+                cost = compute_cost(
+                    str(model), int(prompt_tokens), int(completion_tokens)
+                )
 
                 output_dict = {
                     "content": (

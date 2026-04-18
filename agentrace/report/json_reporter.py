@@ -85,7 +85,9 @@ class JSONReporter:
             task_results.append(
                 TaskResult(
                     task_id=str(row["task_id"]),
-                    metric_scores={str(k): float(v) for k, v in row["metric_scores"].items()},
+                    metric_scores={
+                        str(k): float(v) for k, v in row["metric_scores"].items()
+                    },
                     passed={str(k): bool(v) for k, v in row["passed"].items()},
                     failure_types=[str(x) for x in row["failure_types"]],
                     trace=None,
@@ -98,7 +100,9 @@ class JSONReporter:
             dataset_id=str(data["dataset_id"]),
             timestamp=timestamp,
             task_results=task_results,
-            aggregate_scores={str(k): float(v) for k, v in data["aggregate_scores"].items()},
+            aggregate_scores={
+                str(k): float(v) for k, v in data["aggregate_scores"].items()
+            },
             failure_dist={str(k): int(v) for k, v in data["failure_dist"].items()},
             total_cost_usd=float(data["total_cost_usd"]),
             total_tokens=int(data["total_tokens"]),

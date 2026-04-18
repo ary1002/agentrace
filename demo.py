@@ -33,8 +33,12 @@ async def my_agent(query: str) -> str:
 
 dataset = Dataset(
     [
-        EvalTask(id="t1", query="What is X?", expected_tools=["search"], optimal_steps=3),
-        EvalTask(id="t2", query="What is Y?", expected_tools=["lookup"], optimal_steps=2),
+        EvalTask(
+            id="t1", query="What is X?", expected_tools=["search"], optimal_steps=3
+        ),
+        EvalTask(
+            id="t2", query="What is Y?", expected_tools=["lookup"], optimal_steps=2
+        ),
         EvalTask(
             id="t3",
             query="What is Z?",

@@ -7,9 +7,10 @@ import os
 import time
 import warnings
 from collections import Counter
-from pathlib import Path
+from collections.abc import Awaitable, Callable
 from datetime import datetime, timezone
-from typing import Any, Awaitable, Callable
+from pathlib import Path
+from typing import Any
 
 import agentrace
 from agentrace.classifier import FailureClassifier
@@ -48,7 +49,11 @@ async def evaluate(
     else:
         resolved_run_id = f"run_{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')}"
 
-    cfg = dict(storage_config) if storage_config else {"backend": "sqlite", "path": "./agentrace.db"}
+    cfg = (
+        dict(storage_config)
+        if storage_config
+        else {"backend": "sqlite", "path": "./agentrace.db"}
+    )
     backend = str(cfg.get("backend", "sqlite"))
     sqlite_path = str(cfg.get("path", "./agentrace.db"))
 
@@ -105,9 +110,9 @@ async def evaluate(
             template = METRICS_REGISTRY[name]
             inst = type(template)()
             if thresholds is not None and inst.name in thresholds:
-                setattr(inst, "_run_threshold", float(thresholds[inst.name]))
+                inst._run_threshold = float(thresholds[inst.name])
             else:
-                setattr(inst, "_run_threshold", float(type(inst).default_threshold))
+                inst._run_threshold = float(type(inst).default_threshold)
             resolved_metrics.append(inst)
 
         needs_judge = any(m.name in LLM_METRIC_NAMES for m in resolved_metrics)
@@ -124,19 +129,21 @@ async def evaluate(
 
             async with semaphore:
                 try:
-                    async with agentrace.trace(session_id=task.id, task=task.query) as t:
-                        try:
-                            if timeout_per_task is not None:
+                    async with agentrace.trace(
+                        session_id=task.id, task=task.query
+                    ) as t:
+                        if timeout_per_task is not None:
+                            try:
                                 await asyncio.wait_for(
                                     agent(task.query),
                                     timeout=float(timeout_per_task),
                                 )
-                            else:
-                                await agent(task.query)
-                        except asyncio.TimeoutError:
-                            raise RuntimeError(
-                                f"Agent exceeded timeout_per_task ({float(timeout_per_task)}s)"
-                            ) from None
+                            except asyncio.TimeoutError as exc:
+                                raise RuntimeError(
+                                    f"Agent exceeded timeout_per_task ({float(timeout_per_task)}s)"
+                                ) from exc
+                        else:
+                            await agent(task.query)
 
                     agent_trace = t.agent_trace
                     if agent_trace is None:
@@ -200,9 +207,7 @@ async def evaluate(
         for metric in resolved_metrics:
             name = metric.name
             values = [
-                r.metric_scores[name]
-                for r in all_results
-                if name in r.metric_scores
+                r.metric_scores[name] for r in all_results if name in r.metric_scores
             ]
             if values:
                 aggregate_scores[name] = sum(values) / len(values)

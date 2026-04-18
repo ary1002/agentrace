@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from agentrace.metrics.base import BaseMetric, MetricResult
 
@@ -19,7 +19,11 @@ def _tool_name(span: Span) -> str:
 
 
 def _find_retry_pairs(trace: AgentTrace) -> list[tuple[Span, Span]]:
-    tool_spans = [s for s in sorted(trace.spans, key=lambda x: x.timestamp) if s.span_type == "tool_call"]
+    tool_spans = [
+        s
+        for s in sorted(trace.spans, key=lambda x: x.timestamp)
+        if s.span_type == "tool_call"
+    ]
     pairs: list[tuple[Span, Span]] = []
     for i in range(len(tool_spans) - 1):
         a, b = tool_spans[i], tool_spans[i + 1]
@@ -95,8 +99,8 @@ Respond ONLY with a JSON object:
     async def compute(
         self,
         trace: Any,
-        expected: Optional[Any] = None,
-        judge: Optional[JudgeClient] = None,
+        expected: Any | None = None,
+        judge: JudgeClient | None = None,
     ) -> MetricResult:
         if judge is None:
             raise ValueError("SelfCorrectionQuality requires a JudgeClient")

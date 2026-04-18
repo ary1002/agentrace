@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from agentrace.metrics.base import BaseMetric, MetricResult
 
@@ -31,7 +31,9 @@ class AnswerFaithfulness(BaseMetric):
     name = "answer_faithfulness"
     default_threshold = 0.80
 
-    def _build_prompt(self, trace: AgentTrace, formatted_tool_outputs: str, final_answer: str) -> str:
+    def _build_prompt(
+        self, trace: AgentTrace, formatted_tool_outputs: str, final_answer: str
+    ) -> str:
         return f"""You are evaluating whether an AI agent's final answer is faithful to the information it retrieved.
 
 Task: {trace.task}
@@ -71,14 +73,22 @@ Respond ONLY with a JSON object:
     async def compute(
         self,
         trace: Any,
-        expected: Optional[Any] = None,
-        judge: Optional[JudgeClient] = None,
+        expected: Any | None = None,
+        judge: JudgeClient | None = None,
     ) -> MetricResult:
         if judge is None:
             raise ValueError("AnswerFaithfulness requires a JudgeClient")
 
-        tool_spans = [s for s in sorted(trace.spans, key=lambda x: x.timestamp) if s.span_type == "tool_call"]
-        llm_spans = [s for s in sorted(trace.spans, key=lambda x: x.timestamp) if s.span_type == "llm_call"]
+        tool_spans = [
+            s
+            for s in sorted(trace.spans, key=lambda x: x.timestamp)
+            if s.span_type == "tool_call"
+        ]
+        llm_spans = [
+            s
+            for s in sorted(trace.spans, key=lambda x: x.timestamp)
+            if s.span_type == "llm_call"
+        ]
 
         if not llm_spans:
             return MetricResult(

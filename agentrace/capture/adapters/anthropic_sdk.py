@@ -58,7 +58,9 @@ def patch_anthropic() -> None:
                 usage = getattr(response, "usage", None)
                 prompt_tokens = usage.input_tokens if usage else 0
                 completion_tokens = usage.output_tokens if usage else 0
-                cost = compute_cost(str(model), int(prompt_tokens), int(completion_tokens))
+                cost = compute_cost(
+                    str(model), int(prompt_tokens), int(completion_tokens)
+                )
                 output_dict = _anthropic_output_dict(response)
                 set_span_attributes(
                     span,
@@ -108,7 +110,9 @@ def patch_anthropic() -> None:
                 usage = getattr(response, "usage", None)
                 prompt_tokens = usage.input_tokens if usage else 0
                 completion_tokens = usage.output_tokens if usage else 0
-                cost = compute_cost(str(model), int(prompt_tokens), int(completion_tokens))
+                cost = compute_cost(
+                    str(model), int(prompt_tokens), int(completion_tokens)
+                )
                 output_dict = _anthropic_output_dict(response)
                 set_span_attributes(
                     span,

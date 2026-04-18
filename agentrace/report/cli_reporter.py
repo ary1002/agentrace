@@ -104,7 +104,9 @@ class CLIReporter:
             top_type, top_n = sorted_types[0]
             top_pct = 100.0 * top_n / total_cases if total_cases else 0.0
 
-            div = Text("─────────────────────────────────────────", style=Style(dim=True))
+            div = Text(
+                "─────────────────────────────────────────", style=Style(dim=True)
+            )
             self.console.print(div)
             title = Text("FAILURE BREAKDOWN\n", style=Style(bold=True))
             self.console.print(title)

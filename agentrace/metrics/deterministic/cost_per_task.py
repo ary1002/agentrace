@@ -27,7 +27,9 @@ class CostPerTask(BaseMetric):
         cost = float(trace.total_cost_usd)
         eps = 1e-9
         score = min(1.0, self._CEILING_USD / max(cost, eps))
-        reason = f"total_cost_usd={cost:.6f}, ceiling={self._CEILING_USD}, score={score:.3f}"
+        reason = (
+            f"total_cost_usd={cost:.6f}, ceiling={self._CEILING_USD}, score={score:.3f}"
+        )
         evidence = [reason]
         passed = score >= thr
         return MetricResult(

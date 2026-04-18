@@ -3,7 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import pytest
-from hypothesis import given, strategies as st
+from hypothesis import given
+from hypothesis import strategies as st
 
 from agentrace.normalizer.models import MalformedTraceError
 from agentrace.normalizer.normalizer import Normalizer
@@ -30,7 +31,11 @@ def _mk(span_id: int, parent_id: int | None, ts: int) -> FakeReadable:
         parent=FakeCtx(span_id=parent_id) if parent_id is not None else None,
         start_time=1_000_000_000 + ts,
         end_time=1_000_000_500 + ts,
-        attributes={"agentrace.span_type": "agent_step", "agentrace.input": "{}", "agentrace.output": "{}"},
+        attributes={
+            "agentrace.span_type": "agent_step",
+            "agentrace.input": "{}",
+            "agentrace.output": "{}",
+        },
     )
 
 

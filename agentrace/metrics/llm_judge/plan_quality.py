@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from agentrace.metrics.base import BaseMetric, MetricResult
 
@@ -68,13 +68,17 @@ Respond ONLY with a JSON object:
     async def compute(
         self,
         trace: Any,
-        expected: Optional[Any] = None,
-        judge: Optional[JudgeClient] = None,
+        expected: Any | None = None,
+        judge: JudgeClient | None = None,
     ) -> MetricResult:
         if judge is None:
             raise ValueError("PlanQuality requires a JudgeClient")
 
-        llm_spans = [s for s in sorted(trace.spans, key=lambda x: x.timestamp) if s.span_type == "llm_call"]
+        llm_spans = [
+            s
+            for s in sorted(trace.spans, key=lambda x: x.timestamp)
+            if s.span_type == "llm_call"
+        ]
         if not llm_spans:
             return MetricResult(
                 metric_name=self.name,

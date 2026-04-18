@@ -53,7 +53,9 @@ class HTMLReporter:
 
     def _render(self, result: EvalResult, prev_result: EvalResult | None) -> str:
         env = Environment(
-            loader=FileSystemLoader(str(Path(__file__).resolve().parents[2] / "templates")),
+            loader=FileSystemLoader(
+                str(Path(__file__).resolve().parents[2] / "templates")
+            ),
             autoescape=select_autoescape(["html", "xml"]),
         )
         template = env.get_template("report.html.j2")
@@ -108,34 +110,46 @@ canvas { max-height: 360px; }
 """
 
     def _build_header(self, result: EvalResult) -> str:
-        all_pass = bool(result.aggregate_scores) and all(v >= 0.75 for v in result.aggregate_scores.values())
+        all_pass = bool(result.aggregate_scores) and all(
+            v >= 0.75 for v in result.aggregate_scores.values()
+        )
         badge_class = "badge-pass" if all_pass else "badge-fail"
         badge_text = "PASS" if all_pass else "FAIL"
         ts_str = result.timestamp.strftime("%B %d, %Y %H:%M:%S")
         return (
             f'<div class="card"><h1>AgentTrace Evaluation Report</h1>'
             f'<p class="meta"><strong>Run ID</strong> {html.escape(result.run_id)} · '
-            f'<strong>Dataset ID</strong> {html.escape(result.dataset_id)} · '
-            f'<strong>Timestamp</strong> {html.escape(ts_str)}</p>'
+            f"<strong>Dataset ID</strong> {html.escape(result.dataset_id)} · "
+            f"<strong>Timestamp</strong> {html.escape(ts_str)}</p>"
             f'<p class="meta"><strong>Duration</strong> {result.duration_s:.1f}s · '
-            f'<strong>Total cost</strong> ${result.total_cost_usd:.4f} · '
-            f'<strong>Total tokens</strong> {result.total_tokens:,}</p>'
+            f"<strong>Total cost</strong> ${result.total_cost_usd:.4f} · "
+            f"<strong>Total tokens</strong> {result.total_tokens:,}</p>"
             f'<p><span class="badge {badge_class}">{badge_text}</span></p></div>'
         )
 
-    def _build_metric_table(self, result: EvalResult, prev_result: EvalResult | None) -> str:
+    def _build_metric_table(
+        self, result: EvalResult, prev_result: EvalResult | None
+    ) -> str:
         n_tasks = len(result.task_results)
         rows: list[str] = []
         for metric in sorted(result.aggregate_scores.keys()):
             score = result.aggregate_scores[metric]
             bar_w = f"{max(0.0, min(1.0, score)) * 100:.0f}%"
-            passed_n = sum(1 for r in result.task_results if r.passed.get(metric, False))
+            passed_n = sum(
+                1 for r in result.task_results if r.passed.get(metric, False)
+            )
             if prev_result is None or metric not in prev_result.aggregate_scores:
                 vs = "—"
             else:
                 delta = score - prev_result.aggregate_scores[metric]
-                vs = '<span class="delta-none">─</span>' if abs(delta) < 0.005 else (
-                    f'<span class="delta-up">▲ +{delta:.2f}</span>' if delta > 0 else f'<span class="delta-down">▼ {delta:.2f}</span>'
+                vs = (
+                    '<span class="delta-none">─</span>'
+                    if abs(delta) < 0.005
+                    else (
+                        f'<span class="delta-up">▲ +{delta:.2f}</span>'
+                        if delta > 0
+                        else f'<span class="delta-down">▼ {delta:.2f}</span>'
+                    )
                 )
             rows.append(
                 f"<tr><td>{html.escape(metric)}</td><td>{score:.3f}</td>"
@@ -145,7 +159,7 @@ canvas { max-height: 360px; }
         return (
             '<div class="card"><h2>Metrics</h2><table class="data"><thead>'
             "<tr><th>Metric</th><th>Score</th><th>Bar</th><th>Pass rate</th><th>vs Last Run</th></tr>"
-            f'</thead><tbody>{"".join(rows)}</tbody></table></div>'
+            f"</thead><tbody>{''.join(rows)}</tbody></table></div>"
         )
 
     def _build_metric_radar(self, result: EvalResult) -> str:
@@ -171,8 +185,10 @@ canvas { max-height: 360px; }
         labels = list(result.failure_dist.keys())
         vals = [result.failure_dist[k] for k in labels]
         rows = "".join(
-            f"<tr><td>{html.escape(ft)}</td><td>{cnt}</td><td>{(100.0*cnt/max(1,len(result.task_results))):.1f}%</td></tr>"
-            for ft, cnt in sorted(result.failure_dist.items(), key=lambda x: (-x[1], x[0]))
+            f"<tr><td>{html.escape(ft)}</td><td>{cnt}</td><td>{(100.0 * cnt / max(1, len(result.task_results))):.1f}%</td></tr>"
+            for ft, cnt in sorted(
+                result.failure_dist.items(), key=lambda x: (-x[1], x[0])
+            )
         )
         return f"""
 <div class="card"><h2>Failure Taxonomy</h2><canvas id="failureChart"></canvas>
@@ -185,7 +201,9 @@ if(ctx && typeof Chart!=='undefined'){{new Chart(ctx,{{type:'doughnut',data:{{la
     def _render_trace_node(self, node, depth: int = 0) -> str:
         span = node.span
         label = f"{span.span_type} · tool={span.input.get('tool_name', '—')} · {span.latency_ms:.1f}ms · ${span.cost_usd:.4f}"
-        children = "".join(self._render_trace_node(ch, depth + 1) for ch in node.children)
+        children = "".join(
+            self._render_trace_node(ch, depth + 1) for ch in node.children
+        )
         return (
             f'<details class="trace" {"open" if depth == 0 else ""}>'
             f"<summary>{html.escape(label)}</summary>{children}</details>"
@@ -197,14 +215,28 @@ if(ctx && typeof Chart!=='undefined'){{new Chart(ctx,{{type:'doughnut',data:{{la
         rows: list[str] = []
         for tr in result.task_results:
             status = "pass" if _task_status_pass(tr) else "fail"
-            status_html = '<span style="color:var(--green)">✓ pass</span>' if status == "pass" else '<span style="color:var(--red)">✗ fail</span>'
+            status_html = (
+                '<span style="color:var(--green)">✓ pass</span>'
+                if status == "pass"
+                else '<span style="color:var(--red)">✗ fail</span>'
+            )
             metric_cells = "".join(
-                f'<td style="color:{_bar_color(tr.metric_scores[m])}">{tr.metric_scores[m]:.2f}</td>' if m in tr.metric_scores else '<td style="color:var(--text-dim)">—</td>'
+                f'<td style="color:{_bar_color(tr.metric_scores[m])}">{tr.metric_scores[m]:.2f}</td>'
+                if m in tr.metric_scores
+                else '<td style="color:var(--text-dim)">—</td>'
                 for m in metric_cols
             )
             fails = ", ".join(html.escape(ft) for ft in tr.failure_types) or "—"
-            err = html.escape(tr.error[:80] + ("…" if len(tr.error) > 80 else "")) if tr.error else "—"
-            trace_html = self._render_trace_node(tr.trace.trace_tree) if tr.trace is not None else "—"
+            err = (
+                html.escape(tr.error[:80] + ("…" if len(tr.error) > 80 else ""))
+                if tr.error
+                else "—"
+            )
+            trace_html = (
+                self._render_trace_node(tr.trace.trace_tree)
+                if tr.trace is not None
+                else "—"
+            )
             rows.append(
                 f'<tr class="task-row" data-status="{status}"><td>{html.escape(tr.task_id)}</td><td>{status_html}</td>{metric_cells}<td>{fails}</td><td>{err}</td><td>{trace_html}</td></tr>'
             )
@@ -212,12 +244,16 @@ if(ctx && typeof Chart!=='undefined'){{new Chart(ctx,{{type:'doughnut',data:{{la
 <div class="card"><h2>Per-Task Results</h2>
 <button type="button" class="toggle-fail" onclick="toggleErrors()">Show only failed tasks</button>
 <script>function toggleErrors(){{document.querySelectorAll('.task-row').forEach(r=>{{if(r.dataset.status==='pass'){{r.style.display=r.style.display==='none'?'':'none';}}}});}}</script>
-<table class="data"><thead><tr><th>Task ID</th><th>Status</th>{th_metrics}<th>Failures</th><th>Error</th><th>Trace</th></tr></thead><tbody>{''.join(rows)}</tbody></table></div>"""
+<table class="data"><thead><tr><th>Task ID</th><th>Status</th>{th_metrics}<th>Failures</th><th>Error</th><th>Trace</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>"""
 
-    def _build_run_comparison(self, result: EvalResult, prev_result: EvalResult | None) -> str:
+    def _build_run_comparison(
+        self, result: EvalResult, prev_result: EvalResult | None
+    ) -> str:
         if prev_result is None:
             return ""
-        metrics = sorted(set(result.aggregate_scores) | set(prev_result.aggregate_scores))
+        metrics = sorted(
+            set(result.aggregate_scores) | set(prev_result.aggregate_scores)
+        )
         if not metrics:
             return ""
         cur = [result.aggregate_scores.get(m, 0.0) for m in metrics]
@@ -231,15 +267,21 @@ if(el && typeof Chart!=='undefined'){{new Chart(el,{{type:'bar',data:{{labels:{j
 
     def _build_cost_latency(self, result: EvalResult) -> str:
         task_ids = [tr.task_id for tr in result.task_results]
-        latencies = [tr.trace.total_latency_ms if tr.trace is not None else 0.0 for tr in result.task_results]
-        costs = [tr.trace.total_cost_usd if tr.trace is not None else 0.0 for tr in result.task_results]
+        latencies = [
+            tr.trace.total_latency_ms if tr.trace is not None else 0.0
+            for tr in result.task_results
+        ]
+        costs = [
+            tr.trace.total_cost_usd if tr.trace is not None else 0.0
+            for tr in result.task_results
+        ]
         n = len(result.task_results)
         denom = max(n, 1)
         pass_n = sum(1 for t in result.task_results if _task_status_pass(t))
         return f"""
 <div class="card"><h2>Cost, Latency, and Token Summary</h2>
 <div class="grid-2">
-  <div class="meta"><p><strong>Total cost</strong> ${result.total_cost_usd:.4f}</p><p><strong>Total tokens</strong> {result.total_tokens:,}</p><p><strong>Duration</strong> {result.duration_s:.1f}s</p><p><strong>Pass rate</strong> {(100.0*pass_n/denom):.0f}%</p></div>
+  <div class="meta"><p><strong>Total cost</strong> ${result.total_cost_usd:.4f}</p><p><strong>Total tokens</strong> {result.total_tokens:,}</p><p><strong>Duration</strong> {result.duration_s:.1f}s</p><p><strong>Pass rate</strong> {(100.0 * pass_n / denom):.0f}%</p></div>
   <div><canvas id="latencyHistogram"></canvas><canvas id="costHistogram"></canvas></div>
 </div>
 <script>(function(){{

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 
 from agentrace.normalizer.models import AgentTrace, Span, SpanNode, TokenCount
 
@@ -34,7 +34,13 @@ def make_span(
     )
 
 
-def make_trace(spans: list[Span], *, outcome: str = "success", total_tokens: int = 0, total_cost: float = 0.0) -> AgentTrace:
+def make_trace(
+    spans: list[Span],
+    *,
+    outcome: str = "success",
+    total_tokens: int = 0,
+    total_cost: float = 0.0,
+) -> AgentTrace:
     if spans:
         by_id = {s.span_id: SpanNode(span=s) for s in spans}
         root = by_id[spans[0].span_id]

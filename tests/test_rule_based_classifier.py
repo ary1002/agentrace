@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from conftest import make_span, make_trace
+
 from agentrace.classifier.models import FailureType
 from agentrace.classifier.rule_based import RuleBasedClassifier
-from conftest import make_span, make_trace
 
 
 def test_rule_based_hallucinated_tool_call() -> None:

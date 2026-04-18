@@ -39,7 +39,11 @@ def _tool_end_output_as_str(output: Any) -> str:
     if isinstance(content, list):
         bits: list[str] = []
         for part in content:
-            if isinstance(part, dict) and part.get("type") == "text" and part.get("text"):
+            if (
+                isinstance(part, dict)
+                and part.get("type") == "text"
+                and part.get("text")
+            ):
                 bits.append(str(part["text"]))
             elif hasattr(part, "text"):
                 bits.append(str(getattr(part, "text", "")))
@@ -73,7 +77,9 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
         self._tracer: Any = None
         self._llm_models: dict[str, str] = {}
         if not _AVAILABLE:
-            _LOG.warning("langchain_core is not installed; AgentTraceCallbackHandler is a no-op")
+            _LOG.warning(
+                "langchain_core is not installed; AgentTraceCallbackHandler is a no-op"
+            )
 
     def _get_tracer(self):
         if self._tracer is None:
@@ -139,7 +145,9 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
             ctx.__exit__(None, None, None)
             span.end()
 
-    def on_llm_error(self, error: BaseException, *, run_id: UUID, **kwargs: Any) -> None:
+    def on_llm_error(
+        self, error: BaseException, *, run_id: UUID, **kwargs: Any
+    ) -> None:
         if not _AVAILABLE:
             return
         key = str(run_id)
@@ -200,7 +208,9 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
             ctx.__exit__(None, None, None)
             span.end()
 
-    def on_tool_error(self, error: BaseException, *, run_id: UUID, **kwargs: Any) -> None:
+    def on_tool_error(
+        self, error: BaseException, *, run_id: UUID, **kwargs: Any
+    ) -> None:
         if not _AVAILABLE:
             return
         key = str(run_id)
@@ -237,7 +247,9 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
         span.set_attribute("agentrace.framework", "langchain")
         span.set_attribute("agentrace.input", _json_truncate(inp))
 
-    def on_chain_end(self, outputs: dict[str, Any], *, run_id: UUID, **kwargs: Any) -> None:
+    def on_chain_end(
+        self, outputs: dict[str, Any], *, run_id: UUID, **kwargs: Any
+    ) -> None:
         if not _AVAILABLE:
             return
         key = str(run_id)
@@ -259,7 +271,9 @@ class AgentTraceCallbackHandler(BaseCallbackHandler):
             ctx.__exit__(None, None, None)
             span.end()
 
-    def on_chain_error(self, error: BaseException, *, run_id: UUID, **kwargs: Any) -> None:
+    def on_chain_error(
+        self, error: BaseException, *, run_id: UUID, **kwargs: Any
+    ) -> None:
         if not _AVAILABLE:
             return
         key = str(run_id)

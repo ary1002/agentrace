@@ -7,8 +7,8 @@ import importlib
 import importlib.util
 import inspect
 import sys
+from collections.abc import Awaitable, Callable
 from pathlib import Path
-from typing import Awaitable, Callable
 
 import typer
 from rich.console import Console
@@ -85,7 +85,7 @@ def benchmark(
         dataset = dataset.filter(tags=tag_list or None, difficulty=diff_filter)
         console.print(
             f"  Filtered to {len(dataset)} tasks "
-            f'(tags={tag_list or "any"}, difficulty={diff_filter or "any"})'
+            f"(tags={tag_list or 'any'}, difficulty={diff_filter or 'any'})"
         )
 
     if max_tasks > 0:
@@ -101,7 +101,9 @@ def benchmark(
             path = agent_path.resolve()
             if not path.is_file():
                 raise FileNotFoundError(f"Agent file not found: {path}")
-            spec = importlib.util.spec_from_file_location("_agentrace_benchmark_agent", path)
+            spec = importlib.util.spec_from_file_location(
+                "_agentrace_benchmark_agent", path
+            )
             if spec is None or spec.loader is None:
                 raise ImportError(f"Could not load spec for {path}")
             mod = importlib.util.module_from_spec(spec)
@@ -157,11 +159,12 @@ def benchmark(
 
     CLIReporter().print_results(result, output_path=json_path, html_path=html_path)
 
-    failed = [m for m, score in result.aggregate_scores.items() if score < min_score_threshold]
+    failed = [
+        m for m, score in result.aggregate_scores.items() if score < min_score_threshold
+    ]
     if failed:
         console.print(
-            f'\n[red]✗ Below threshold ({min_score_threshold}): {", ".join(failed)}[/red]'
+            f"\n[red]✗ Below threshold ({min_score_threshold}): {', '.join(failed)}[/red]"
         )
         raise typer.Exit(1)
     console.print("\n[green]✓ All metrics passed threshold[/green]")
-

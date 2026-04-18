@@ -29,7 +29,9 @@ class Span:
 
     span_id: str
     parent_span_id: str | None
-    span_type: Literal["llm_call", "tool_call", "memory_read", "memory_write", "agent_step"]
+    span_type: Literal[
+        "llm_call", "tool_call", "memory_read", "memory_write", "agent_step"
+    ]
     input: dict
     output: dict
     latency_ms: float

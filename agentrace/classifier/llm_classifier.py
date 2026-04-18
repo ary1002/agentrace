@@ -86,7 +86,9 @@ Respond ONLY with a JSON object:
   ]
 }}"""
 
-    def _fix_prompt(self, failure_type: str, span: Span, task: str, explanation: str) -> str:
+    def _fix_prompt(
+        self, failure_type: str, span: Span, task: str, explanation: str
+    ) -> str:
         input_summary = _summarize(span.input, 400)
         return f"""Given this agent failure in the task '{task}':
 Failure type: {failure_type}
@@ -201,7 +203,9 @@ Two sentences maximum. Respond ONLY with a JSON object:
                 fix_prompts.append("")
                 continue
             fix_prompts.append(
-                self._fix_prompt(rec.failure_type.name, span, trace.task, rec.explanation)
+                self._fix_prompt(
+                    rec.failure_type.name, span, trace.task, rec.explanation
+                )
             )
 
         indices = [i for i, p in enumerate(fix_prompts) if p]

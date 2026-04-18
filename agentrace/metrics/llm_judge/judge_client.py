@@ -169,7 +169,9 @@ def _fill_required_from_flat_aliases(
     return out
 
 
-def _coerce_parsed_for_schema(parsed: Any, response_schema: dict[str, Any]) -> dict[str, Any]:
+def _coerce_parsed_for_schema(
+    parsed: Any, response_schema: dict[str, Any]
+) -> dict[str, Any]:
     """Return a flat dict that contains all ``response_schema`` keys.
 
     Models often wrap the payload (e.g. ``{{"result": {{"score": ...}}}}``),
@@ -182,7 +184,9 @@ def _coerce_parsed_for_schema(parsed: Any, response_schema: dict[str, Any]) -> d
         if len(parsed) == 1 and isinstance(parsed[0], dict):
             parsed = parsed[0]
         else:
-            raise JudgeParseError("expected a JSON object or a single-element array of objects")
+            raise JudgeParseError(
+                "expected a JSON object or a single-element array of objects"
+            )
 
     if not isinstance(parsed, dict):
         raise JudgeParseError("expected JSON object")

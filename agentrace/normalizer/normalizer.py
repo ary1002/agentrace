@@ -3,14 +3,21 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping
 from dataclasses import replace
 from datetime import datetime, timezone
-from typing import Literal, cast, Mapping, Any
+from typing import Any, Literal, cast
 
 from opentelemetry.sdk.trace import ReadableSpan
 from opentelemetry.trace import format_span_id
 
-from agentrace.normalizer.models import AgentTrace, MalformedTraceError, Span, SpanNode, TokenCount
+from agentrace.normalizer.models import (
+    AgentTrace,
+    MalformedTraceError,
+    Span,
+    SpanNode,
+    TokenCount,
+)
 
 _SPAN_TYPES: tuple[str, ...] = (
     "llm_call",
@@ -25,7 +32,9 @@ class Normalizer:
     """Builds ``AgentTrace`` from exported SDK spans and attribute conventions."""
 
     @classmethod
-    def build(cls, session_id: str, task: str, raw_spans: list[ReadableSpan]) -> AgentTrace:
+    def build(
+        cls, session_id: str, task: str, raw_spans: list[ReadableSpan]
+    ) -> AgentTrace:
         spans: list[Span] = [cls._convert_readable(r) for r in raw_spans]
         roots = [s for s in spans if s.parent_span_id is None]
         if len(roots) == 0:
@@ -49,7 +58,9 @@ class Normalizer:
                 error=None,
             )
             reparented = [
-                replace(s, parent_span_id="virtual_root") if s.parent_span_id is None else s
+                replace(s, parent_span_id="virtual_root")
+                if s.parent_span_id is None
+                else s
                 for s in spans
             ]
             spans = [virtual] + reparented
@@ -87,7 +98,9 @@ class Normalizer:
         )
 
     @staticmethod
-    def _attr_get(attributes: Any, key: str, default: object | None = None) -> object | None:
+    def _attr_get(
+        attributes: Any, key: str, default: object | None = None
+    ) -> object | None:
         if attributes is None:
             return default
         if isinstance(attributes, Mapping):
@@ -174,7 +187,9 @@ class Normalizer:
             )
             or "unknown"
         )
-        err_raw = cls._attr_get(attrs, "agentrace.error", cls._attr_get(attrs, "openinference.error"))
+        err_raw = cls._attr_get(
+            attrs, "agentrace.error", cls._attr_get(attrs, "openinference.error")
+        )
         error: str | None = None if err_raw is None else str(err_raw)
 
         return Span(
@@ -215,7 +230,9 @@ class Normalizer:
             return "memory_write"
         if s in _SPAN_TYPES:
             return cast(
-                Literal["llm_call", "tool_call", "memory_read", "memory_write", "agent_step"],
+                Literal[
+                    "llm_call", "tool_call", "memory_read", "memory_write", "agent_step"
+                ],
                 s,
             )
         return "agent_step"
@@ -240,17 +257,21 @@ class Normalizer:
         if isinstance(raw, (int, float, bool)):
             return {"value": raw}
         if not isinstance(raw, str):
-            raise MalformedTraceError(f"{key!r} must be a JSON object string or dict, got {type(raw)}")
+            raise MalformedTraceError(
+                f"{key!r} must be a JSON object string or dict, got {type(raw)}"
+            )
         try:
             obj = json.loads(raw)
-        except json.JSONDecodeError as exc:
+        except json.JSONDecodeError:
             return {"value": raw}
         if not isinstance(obj, dict):
             return {"value": obj}
         return obj
 
     @classmethod
-    def _int_attr(cls, attributes: object, key: str, fallback_keys: tuple[str, ...] = ()) -> int:
+    def _int_attr(
+        cls, attributes: object, key: str, fallback_keys: tuple[str, ...] = ()
+    ) -> int:
         raw = cls._attr_get(attributes, key)
         if raw is None:
             for fb in fallback_keys:

@@ -6,8 +6,8 @@ import asyncio
 import importlib
 import inspect
 import os
+from collections.abc import Awaitable, Callable
 from pathlib import Path
-from typing import Any, Awaitable, Callable
 
 import typer
 from rich.console import Console
@@ -58,9 +58,7 @@ def run(
         elif dataset_cfg.get("path"):
             dataset = Dataset.from_json(str(dataset_cfg["path"]))
         else:
-            console.print(
-                "[red]dataset config must specify either suite or path[/red]"
-            )
+            console.print("[red]dataset config must specify either suite or path[/red]")
             raise typer.Exit(1)
 
         metrics = ec.metrics
@@ -126,7 +124,9 @@ def run(
             json_path = os.path.join(od, f"{result.run_id}.json")
             html_path = os.path.join(od, f"{result.run_id}.html")
 
-        reporter = CLIReporter(thresholds={str(k): float(v) for k, v in thresholds.items()})
+        reporter = CLIReporter(
+            thresholds={str(k): float(v) for k, v in thresholds.items()}
+        )
         reporter.print_results(result, output_path=json_path, html_path=html_path)
 
         for metric_name, score in result.aggregate_scores.items():
@@ -184,7 +184,9 @@ def runs(
         )
         ts = run["timestamp"]
         ts_display = (
-            ts[:19].replace("T", " ") if isinstance(ts, str) and len(ts) >= 19 else str(ts)
+            ts[:19].replace("T", " ")
+            if isinstance(ts, str) and len(ts) >= 19
+            else str(ts)
         )
         task_n = run.get("task_count", "—")
         table.add_row(
